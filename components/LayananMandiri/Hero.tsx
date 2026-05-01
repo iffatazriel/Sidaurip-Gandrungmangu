@@ -3,7 +3,7 @@ import React from 'react'
 export default function Hero() {
   return (
     <div>
-      <section className="max-w-7xl mx-auto px-8 py-20 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      <section className="max-w-7xl mx-auto px-8 py-30 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-7 space-y-8">
                 <div
                     className="inline-flex items-center gap-2 px-3 py-1 bg-secondary-fixed text-on-secondary-fixed rounded-full text-[10px] font-bold tracking-widest uppercase">

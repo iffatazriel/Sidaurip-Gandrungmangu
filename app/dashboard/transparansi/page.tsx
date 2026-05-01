@@ -1,10 +1,8 @@
 import Header from "@/components/Dashboard/Header";
-import ActivityCard from "@/components/Dashboard/ActivityCard";
+import ManagementSection from "@/components/Dashboard/KelolaTransparansi/ManagementSection";
+import MainContent from "@/components/Dashboard/KelolaTransparansi/MainContent";
 import Sidebar from "@/components/Dashboard/Sidebar";
-import SummaryCards from "@/components/Dashboard/SummaryCards";
-import React from "react";
-import RecentActivityCard from "@/components/Dashboard/RecentActivityCard";
-import FooterShift from "@/components/Dashboard/FooterShift";
+
 
 const DashboardPage = () => {
   return (
@@ -18,10 +16,8 @@ const DashboardPage = () => {
 
         <main className="flex-1 p-6 bg-gray-50">
           {/* isi dashboard */}
-          <SummaryCards />
-          <ActivityCard />
-          <RecentActivityCard />
-          <FooterShift />
+          <MainContent />
+          <ManagementSection />
         </main>
       </div>
     </div>

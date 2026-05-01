@@ -3,62 +3,57 @@ import Image from "next/image";
 
 export default function Header() {
   return (
-    <header className="sticky top-0 z-40 border-b border-outline-variant bg-surface-container-lowest/90 shadow-sm shadow-primary/5 backdrop-blur-xl">
-      <div className="flex w-full items-center justify-between px-8 py-3">
-        <div className="flex items-center gap-8">
-          <h2 className="font-headline text-xl font-bold uppercase tracking-wider text-primary">
-            CIVIC SANCTUARY CONSOLE
-          </h2>
-          <div className="hidden w-96 items-center rounded-full bg-surface-container-low px-4 py-2 lg:flex">
-            <span className="material-symbols-outlined mr-2 text-on-surface-variant">
-              search
-            </span>
-            <input
-              className="w-full border-none bg-transparent p-0 text-sm text-on-surface placeholder:text-on-surface-variant focus:ring-0"
-              placeholder="Search records, news, or reports..."
-              type="text"
-            />
-          </div>
+    <header className="flex items-center justify-between px-8 py-3 w-full border-b border-slate-100 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl sticky top-0 z-40">
+      <div className="flex items-center gap-6">
+        <h2 className="text-xl font-bold text-blue-900 dark:text-white uppercase tracking-wider font-['Plus_Jakarta_Sans']">
+          Civic Sanctuary Console
+        </h2>
+        <div className="hidden md:flex relative">
+          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+            search
+          </span>
+          <input
+            className="pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-800 border-none rounded-full text-sm w-64 focus:ring-2 focus:ring-blue-900/20"
+            placeholder="Search services or requests..."
+            type="text"
+          />
         </div>
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-1">
-            <button className="rounded-full p-2 text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-primary active:scale-95">
-              <span
-                className="material-symbols-outlined"
-                data-icon="notifications"
-              >
-                notifications
-              </span>
-            </button>
-            <button className="rounded-full p-2 text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-primary active:scale-95">
-              <span className="material-symbols-outlined" data-icon="mail">
-                mail
-              </span>
-            </button>
-            <button className="rounded-full p-2 text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-primary active:scale-95">
-              <span className="material-symbols-outlined" data-icon="help">
-                help
-              </span>
-            </button>
+      </div>
+      <div className="flex items-center gap-4">
+        <button className="p-2 text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-full transition-colors relative">
+          <span className="material-symbols-outlined" data-icon="notifications">
+            notifications
+          </span>
+          <span className="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+        </button>
+        <button className="p-2 text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-full transition-colors">
+          <span className="material-symbols-outlined" data-icon="mail">
+            mail
+          </span>
+        </button>
+        <button className="p-2 text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-full transition-colors">
+          <span className="material-symbols-outlined" data-icon="help">
+            help
+          </span>
+        </button>
+        <div className="h-8 w-px bg-slate-100 dark:bg-slate-800 mx-2"></div>
+        <div className="flex items-center gap-3">
+          <div className="text-right">
+            <p className="text-xs font-bold text-blue-900 dark:text-blue-100">
+              Admin Utama
+            </p>
+            <p className="text-[10px] text-slate-500 uppercase tracking-tighter">
+              Office Level 4
+            </p>
           </div>
-          <div className="mx-2 h-8 w-px bg-outline-variant"></div>
-          <div className="flex items-center gap-3">
-            <div className="hidden text-right sm:block">
-              <p className="text-sm font-bold text-primary">Admin Utama</p>
-              <p className="text-[10px] uppercase tracking-widest text-on-surface-variant">
-                Super Administrator
-              </p>
-            </div>
-            <Image
-              alt="Administrator Profile"
-              className="h-10 w-10 rounded-full object-cover ring-2 ring-primary/10"
-              data-alt="portrait of a professional male administrator in his 40s wearing a clean white shirt with soft studio lighting"
-              height={40}
-              sizes="40px"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNJY-_x907FNyUNMtzOoYZNscJgdCqSewX34UPtk9oTjuFUMUdkIfWQSSWYU13VOQMwIyYGWh_YglU3iIi5rcNeAvkgUz8ftXwidjGrlIgRPOzJtA6tSKmETrhOaWKNJKeb7-JRf89JxiPbA0WpNE04MkWoc3XpEaw-YB8oxu6VYKnY81A97b0_vVS0BkKC0oFkg_vji6HXoJ1KZI3lkq-g6muiMIJbGwa6JkFEYyzL6zifflgog_KTD1lHrFE8Mjk0_b7JWNhHA"
-              width={40}
-            />
-          </div>
+          <Image
+            alt="Administrator Profile"
+            className="w-10 h-10 rounded-full object-cover border-2 border-primary-container"
+            data-alt="professional portrait of a confident male government administrator in a clean office setting with soft natural light"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmb1H0GQcwkLNKIdhMNAIwmdeqNQ5_2STlOCgQkUa_KQNNvgJSswKJWesYbr8UjFDMuB0z-brIDOk5hat0-PyTHEonSZHE5LJhNXe5uLaBFnYPWblFXA8fayR-3gKp9GIG491P2H9vqJXt3Do1pAusqJHjCp8iKSfT198Ac0USRUobgLCesqei7osOWChY4YH0a1aONMi7MANA7cUrPNV7p9MOxi_tOSM76tzl5bVtgUe4x80LYfiUz3oknIv9YSEB0ALBX5XMLQ"
+            width={40}
+            height={40}
+          />
         </div>
       </div>
     </header>

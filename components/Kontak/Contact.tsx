@@ -1,4 +1,5 @@
 import React from 'react'
+import SidauripMap from './SidauripMap'
 
 export default function Contact() {
   return (
@@ -54,8 +55,10 @@ export default function Contact() {
                                     <span className="material-symbols-outlined text-on-primary-container">location_on</span>
                                     <div>
                                         <p className="font-semibold">Alamat Kantor</p>
-                                        <p className="text-sm text-on-primary-container leading-relaxed">Jl. Kenanga No. 12,
-                                            Desa Mandiri Utama, <br />Kecamatan Sejahtera, Kabupaten Nusantara 40123</p>
+                                        <p className="text-sm text-on-primary-container leading-relaxed">
+                                            Balai Desa Sidaurip, <br />
+                                            Kecamatan Gandrungmangu, Kabupaten Cilacap, Jawa Tengah 53254
+                                        </p>
                                     </div>
                                 </li>
                                 <li className="flex items-start gap-4">
@@ -110,37 +113,8 @@ export default function Contact() {
                     </div>
                 </div>
                 {/* Map Integration (Full Width)  */}
-                <div className="lg:col-span-12 relative h-[450px] rounded-2xl overflow-hidden editorial-shadow group">
-                    <img alt="Peta Lokasi Kantor Desa"
-                        className="w-full h-full object-cover grayscale opacity-50 group-hover:grayscale-0 transition-all duration-700"
-                        data-alt="stylized birds eye map view of a clean organized suburban village layout with green trees and professional administrative buildings"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAO0_aMT90tuPxSlP-3oAoadtt0wVC3CZ2U1B-zZaUrcCuWFRPAWJfSthVTavpGddp5zi2pl2YhwWrWbjsauhVjuWyALZ5is0zlMA9qOSvCSNVhIuJO-4Jr32RQcprg04j3wnTQGh4DStWuwt77hoPs08U3KtEWfzVaWWJmYrZ6aWM3jgW3NoKMagUlqv49MudXinnI8CHXu7DA7R0VyOiFI7kzPBcuOTORW5wR87GfcR03Ep4s-2ppETyYIHMCKe1OCqvHdEMdLg" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent flex items-end p-12">
-                        <div className="bg-white/95 backdrop-blur-md p-6 rounded-lg max-w-sm editorial-shadow">
-                            <div className="flex items-center gap-3 mb-2">
-                                <span className="material-symbols-outlined text-primary"
-                                    data-weight="fill">location_on</span>
-                                <h4 className="font-headline font-bold text-primary">Balaidesa Utama</h4>
-                            </div>
-                            <p className="text-xs text-on-surface-variant mb-4 leading-relaxed">
-                                Temukan kami dengan mudah melalui navigasi langsung. Parkir tersedia luas di area depan
-                                kantor untuk warga.
-                            </p>
-                            <a className="inline-flex items-center gap-2 text-primary font-bold text-sm hover:underline"
-                                href="#">
-                                Buka di Google Maps
-                                <span className="material-symbols-outlined text-xs">open_in_new</span>
-                            </a>
-                        </div>
-                    </div>
-                    {/* Simulated Map Pins  */}
-                    <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                        <div className="relative flex items-center justify-center">
-                            <div className="absolute w-20 h-20 bg-primary/20 rounded-full animate-pulse"></div>
-                            <span className="material-symbols-outlined text-primary text-5xl relative z-10"
-                                style={{ fontVariationSettings: "'FILL' 1" }}>location_on</span>
-                        </div>
-                    </div>
+                <div className="lg:col-span-12">
+                    <SidauripMap />
                 </div>
             </div>
         </section>
