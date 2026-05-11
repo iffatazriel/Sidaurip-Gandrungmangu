@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const navItems = [
   { label: "Dashboard", href: "/dashboard", icon: "grid_view" },
@@ -14,36 +14,46 @@ const navItems = [
   },
   { label: "Transparency", href: "/dashboard/transparansi", icon: "equalizer" },
   { label: "Residents", href: "/dashboard/kelolapenduduk", icon: "group" },
+  { label: "Citizen Accounts", href: "/dashboard/akun-warga", icon: "verified_user" },
 ];
 
 const secondaryNavItems = [
-  { label: "Settings", href: "/kontak", icon: "settings" },
+  { label: "Overview", href: "/dashboard", icon: "settings" },
 ];
 
 function isActivePath(pathname: string, href: string) {
-  if (href === "/" || href === "/dashboard") {
-    return pathname === href;
+  // Exact match untuk dashboard root
+  if (href === "/dashboard") {
+    return pathname === "/dashboard";
   }
-
+  
+  // Untuk route lain, cek exact match atau child routes
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const logout = async () => {
+    await fetch("/api/auth/logout", { method: "POST" });
+    router.push("/login");
+    router.refresh();
+  };
 
   return (
     <aside className="sticky left-0 top-0 z-50 flex h-screen w-72 flex-col border-r border-outline-variant bg-surface-container-lowest text-sm font-medium text-on-surface">
       <div className="flex h-full flex-col gap-2 overflow-y-auto p-6">
         <Link className="mb-8 flex items-center gap-3" href="/dashboard">
-            <Image
-              src="/Logo-Cilacap.png"
-              alt="Logo Kabupaten Cilacap"
-              width={96}
-              height={96}
-              className="h-11 w-11 object-contain sm:h-12 sm:w-12"
-              priority
-              quality={100}
-            />
+          <Image
+            src="/Logo-Cilacap.png"
+            alt="Logo Kabupaten Cilacap"
+            width={96}
+            height={96}
+            className="h-11 w-11 object-contain sm:h-12 sm:w-12"
+            priority
+            quality={100}
+          />
           <div>
             <h1 className="font-headline text-lg font-extrabold leading-tight text-primary">
               Balaidesa Digital
@@ -53,6 +63,7 @@ export default function Sidebar() {
             </p>
           </div>
         </Link>
+
         <nav className="flex-1 space-y-1">
           {navItems.map((item) => {
             const isActive = isActivePath(pathname, item.href);
@@ -80,14 +91,21 @@ export default function Sidebar() {
             );
           })}
         </nav>
+
         <div className="mt-auto space-y-1 pt-6">
-          <Link
+          {/* <Link
             className="mb-6 flex w-full items-center justify-center gap-2 rounded-xl bg-secondary px-4 py-3 font-bold text-on-secondary transition-all hover:brightness-110 active:scale-95"
             href="/dashboard/kelolaberita"
           >
-            <span className="material-symbols-outlined">add</span>
+            <span 
+              className="material-symbols-outlined"
+              style={{ fontVariationSettings: "'FILL' 1" }}
+            >
+              add
+            </span>
             New Entry
-          </Link>
+          </Link> */}
+
           {secondaryNavItems.map((item) => {
             const isActive = isActivePath(pathname, item.href);
 
@@ -105,6 +123,7 @@ export default function Sidebar() {
                 <span
                   className="material-symbols-outlined"
                   data-icon={item.icon}
+                  style={{ fontVariationSettings: "'FILL' 1" }}
                 >
                   {item.icon}
                 </span>
@@ -112,15 +131,22 @@ export default function Sidebar() {
               </Link>
             );
           })}
-          <Link
-            className="flex items-center gap-3 rounded-lg px-4 py-3 text-error transition-all duration-300 hover:translate-x-1"
-            href="/"
+
+          <button
+            aria-label="Log out from dashboard"
+            className="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-left text-error transition-all duration-300 hover:translate-x-1"
+            onClick={logout}
+            type="button"
           >
-            <span className="material-symbols-outlined" data-icon="logout">
+            <span 
+              className="material-symbols-outlined" 
+              data-icon="logout"
+              style={{ fontVariationSettings: "'FILL' 1" }}
+            >
               logout
             </span>
             Log Out
-          </Link>
+          </button>
         </div>
       </div>
     </aside>

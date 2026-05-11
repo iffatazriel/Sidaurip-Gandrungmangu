@@ -1,9 +1,6 @@
 import Header from '@/components/Dashboard/Header'
-import LogActivity from '@/components/Dashboard/LayananPublik/LogActivity'
-import MainContent from '@/components/Dashboard/LayananPublik/MainContent'
-import ServiceConfiguration from '@/components/Dashboard/LayananPublik/ServiceConfiguration'
+import ServiceRequestsManager from '@/components/Dashboard/LayananPublik/ServiceRequestsManager'
 import Sidebar from '@/components/Dashboard/Sidebar'
-import React from 'react'
 
 function LayananPublik() {
   return (
@@ -17,9 +14,7 @@ function LayananPublik() {
     
             <main className="flex-1 p-6 bg-gray-50">
               {/* isi dashboard */}
-            <MainContent />
-            <ServiceConfiguration />
-            <LogActivity />    
+            <ServiceRequestsManager />
             </main>
           </div>
         </div>

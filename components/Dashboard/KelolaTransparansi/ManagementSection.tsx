@@ -1,4 +1,4 @@
-import React from "react";
+'use client';
 
 export default function ManagementSection() {
   return (
@@ -30,10 +30,10 @@ export default function ManagementSection() {
                   <label className="text-xs font-bold text-slate-500 uppercase">
                     Budgeted (Rp)
                   </label>
-                  <input
+                  <input 
                     className="w-full bg-surface-container-lowest border border-outline-variant/20 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary-container/20 font-bold text-blue-900"
                     type="text"
-                    value="1.200.000.000"
+                    defaultValue="1.200.000.000"
                   />
                 </div>
                 <div className="space-y-1.5">

@@ -1,6 +1,42 @@
-import { residents } from "./data";
+import type { Resident, ResidentsResponse } from "./types";
 
-export default function ResidentTable() {
+type ResidentTableProps = {
+  residents: Resident[];
+  meta: ResidentsResponse["meta"];
+  isLoading: boolean;
+  onPageChange: (page: number) => void;
+};
+
+function getInitials(name: string) {
+  return name
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase();
+}
+
+function getStatusClass(status: string) {
+  if (status === "AKTIF") {
+    return "bg-secondary-fixed text-on-secondary-fixed-variant";
+  }
+  if (status === "MENINGGAL") {
+    return "bg-error-container text-on-error-container";
+  }
+
+  return "bg-surface-container-high text-on-surface-variant";
+}
+
+export default function ResidentTable({
+  residents,
+  meta,
+  isLoading,
+  onPageChange,
+}: ResidentTableProps) {
+  const firstShown = meta.total === 0 ? 0 : (meta.page - 1) * meta.perPage + 1;
+  const lastShown = Math.min(meta.page * meta.perPage, meta.total);
+
   return (
     <div className="overflow-hidden rounded-2xl bg-surface-container-lowest shadow-sm">
       <div className="overflow-x-auto">
@@ -25,7 +61,27 @@ export default function ResidentTable() {
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
-            {residents.map((resident) => (
+            {isLoading ? (
+              <tr>
+                <td
+                  className="px-8 py-10 text-center text-sm font-semibold text-on-surface-variant"
+                  colSpan={5}
+                >
+                  Memuat data penduduk...
+                </td>
+              </tr>
+            ) : null}
+            {!isLoading && residents.length === 0 ? (
+              <tr>
+                <td
+                  className="px-8 py-10 text-center text-sm font-semibold text-on-surface-variant"
+                  colSpan={5}
+                >
+                  Belum ada data penduduk yang cocok.
+                </td>
+              </tr>
+            ) : null}
+            {!isLoading && residents.map((resident) => (
               <tr
                 key={resident.nik}
                 className="group transition-colors hover:bg-slate-50/50"
@@ -37,29 +93,27 @@ export default function ResidentTable() {
                 </td>
                 <td className="px-8 py-6">
                   <div className="flex items-center gap-3">
-                    <div
-                      className={`flex h-9 w-9 items-center justify-center rounded-full text-xs font-bold ${resident.avatarClass}`}
-                    >
-                      {resident.initials}
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-900">
+                      {getInitials(resident.nama)}
                     </div>
                     <span className="text-sm font-bold text-primary">
-                      {resident.name}
+                      {resident.nama}
                     </span>
                   </div>
                 </td>
                 <td className="px-8 py-6">
                   <div className="flex flex-col">
                     <span className="text-sm font-medium text-on-surface">
-                      {resident.dusun}
+                      {resident.dusun ?? resident.alamat}
                     </span>
                     <span className="text-[10px] font-bold uppercase text-on-surface-variant">
-                      {resident.rtRw}
+                      RT {resident.rt ?? "-"} / RW {resident.rw ?? "-"}
                     </span>
                   </div>
                 </td>
                 <td className="px-8 py-6 text-center">
                   <span
-                    className={`inline-flex items-center rounded-full px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider ${resident.statusClass}`}
+                    className={`inline-flex items-center rounded-full px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider ${getStatusClass(resident.status)}`}
                   >
                     {resident.status}
                   </span>
@@ -93,12 +147,18 @@ export default function ResidentTable() {
       </div>
       <div className="flex flex-col gap-4 border-t border-slate-100 bg-slate-50/30 px-8 py-6 md:flex-row md:items-center md:justify-between">
         <span className="text-xs font-semibold text-on-surface-variant">
-          Showing <span className="text-primary">1-10</span> of 4,829 residents
+          Showing{" "}
+          <span className="text-primary">
+            {firstShown}-{lastShown}
+          </span>{" "}
+          of {meta.total.toLocaleString("id-ID")} residents
         </span>
         <div className="flex items-center gap-1">
           <button
             type="button"
             className="rounded-md p-1 text-slate-400 transition-all hover:bg-white hover:text-primary"
+            disabled={meta.page <= 1}
+            onClick={() => onPageChange(Math.max(1, meta.page - 1))}
           >
             <span className="material-symbols-outlined">chevron_left</span>
           </button>
@@ -106,27 +166,41 @@ export default function ResidentTable() {
             type="button"
             className="h-8 w-8 rounded-md bg-primary text-xs font-bold text-white shadow-sm"
           >
-            1
+            {meta.page}
           </button>
-          {[2, 3].map((page) => (
+          {meta.page + 1 <= meta.totalPages ? (
             <button
-              key={page}
               type="button"
               className="h-8 w-8 rounded-md text-xs font-bold text-on-surface-variant transition-all hover:bg-white"
+              onClick={() => onPageChange(meta.page + 1)}
             >
-              {page}
+              {meta.page + 1}
             </button>
-          ))}
-          <span className="px-2 text-xs text-slate-400">...</span>
+          ) : null}
+          {meta.page + 2 <= meta.totalPages ? (
+            <button
+              type="button"
+              className="h-8 w-8 rounded-md text-xs font-bold text-on-surface-variant transition-all hover:bg-white"
+              onClick={() => onPageChange(meta.page + 2)}
+            >
+              {meta.page + 2}
+            </button>
+          ) : null}
+          {meta.page + 2 < meta.totalPages ? (
+            <span className="px-2 text-xs text-slate-400">...</span>
+          ) : null}
           <button
             type="button"
             className="h-8 w-8 rounded-md text-xs font-bold text-on-surface-variant transition-all hover:bg-white"
+            onClick={() => onPageChange(meta.totalPages)}
           >
-            483
+            {meta.totalPages}
           </button>
           <button
             type="button"
             className="rounded-md p-1 text-slate-400 transition-all hover:bg-white hover:text-primary"
+            disabled={meta.page >= meta.totalPages}
+            onClick={() => onPageChange(Math.min(meta.totalPages, meta.page + 1))}
           >
             <span className="material-symbols-outlined">chevron_right</span>
           </button>

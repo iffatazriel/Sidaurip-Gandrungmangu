@@ -1,9 +1,43 @@
-import { stats } from "./data";
+import type { ResidentStats } from "./types";
 
-export default function StatisticsHeader() {
+type StatisticsHeaderProps = {
+  stats: ResidentStats;
+};
+
+const statCards = [
+  {
+    label: "Total Penduduk",
+    icon: "group",
+    detailIcon: "database",
+    detail: "Tersimpan di database",
+    detailClass: "text-secondary",
+    hoverClass: "group-hover:text-blue-50",
+    getValue: (stats: ResidentStats) => stats.total,
+  },
+  {
+    label: "Status Aktif",
+    icon: "verified_user",
+    detailIcon: "check_circle",
+    detail: "Warga aktif",
+    detailClass: "text-secondary",
+    hoverClass: "group-hover:text-emerald-50",
+    getValue: (stats: ResidentStats) => stats.active,
+  },
+  {
+    label: "Pindah / Meninggal",
+    icon: "analytics",
+    detailIcon: "info",
+    detail: "Status nonaktif",
+    detailClass: "text-error",
+    hoverClass: "group-hover:text-red-50",
+    getValue: (stats: ResidentStats) => stats.moved + stats.deceased,
+  },
+];
+
+export default function StatisticsHeader({ stats }: StatisticsHeaderProps) {
   return (
     <div className="mb-12 grid grid-cols-1 gap-6 md:grid-cols-3">
-      {stats.map((stat) => (
+      {statCards.map((stat) => (
         <div
           key={stat.label}
           className="group relative overflow-hidden rounded-xl border-none bg-surface-container-lowest p-8 shadow-sm"
@@ -13,7 +47,7 @@ export default function StatisticsHeader() {
               {stat.label}
             </p>
             <h3 className="font-headline text-4xl font-extrabold text-primary">
-              {stat.value}
+              {stat.getValue(stats).toLocaleString("id-ID")}
             </h3>
             <div
               className={`mt-4 flex items-center gap-2 text-sm font-semibold ${stat.detailClass}`}

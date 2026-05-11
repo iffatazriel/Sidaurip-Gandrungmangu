@@ -1,0 +1,101 @@
+nama,nik,jenisKelamin,tempatLahir,tanggalLahir,agama,alamat,rt,rw,dusun,pekerjaan,pendidikan,statusKawin,noKK,status
+Ginanjar Komarudin,3303270201715815,Laki-laki,Gandrungmangu,2011-06-16,Islam,Desa Sidaurip RT 006 RW 004 Dusun Krajan,006,004,Krajan,Pelajar/Mahasiswa,SMP,Belum Kawin,3303702195326811,AKTIF
+Julaeha Erna,3303270508532787,Perempuan,Purwokerto,1984-09-20,Islam,Desa Sidaurip RT 006 RW 001 Dusun Krajan,006,001,Krajan,Ibu Rumah Tangga,S2,Cerai Mati,3303702195326811,AKTIF
+Poppy Fitriani,3303180583776866,Perempuan,Kebumen,1962-02-21,Islam,Desa Sidaurip RT 004 RW 004 Dusun Sidaurip 2,004,004,Sidaurip 2,Ibu Rumah Tangga,Tidak/Belum Sekolah,Kawin,3303424312676924,AKTIF
+Ani Nurhayati,3303070716138453,Perempuan,Kebumen,1984-10-28,Islam,Desa Sidaurip RT 005 RW 002 Dusun Sidaurip 1,005,002,Sidaurip 1,Tidak Bekerja,SD,Belum Kawin,3303424312676924,AKTIF
+Fahmi Rahman Lukman,3303090756727948,Laki-laki,Cilacap,1942-06-22,Hindu,Desa Sidaurip RT 002 RW 001 Dusun Sidaurip 3,002,001,Sidaurip 3,Pedagang,D3,Belum Kawin,3303424312676924,AKTIF
+Yeni Rohaeni,3303021113199739,Perempuan,Purbalingga,1973-04-15,Buddha,Desa Sidaurip RT 001 RW 005 Dusun Krajan,001,005,Krajan,Ibu Rumah Tangga,SD,Cerai Mati,3303706388702071,AKTIF
+Yanto Hermawan Budi,3303231003904991,Laki-laki,Purbalingga,1966-12-07,Buddha,Desa Sidaurip RT 002 RW 002 Dusun Pasar,002,002,Pasar,Petani,SMA,Belum Kawin,3303706388702071,AKTIF
+Gina Rosalina,3303081160447272,Perempuan,Purbalingga,1983-06-26,Katolik,Desa Sidaurip RT 007 RW 003 Dusun Krajan,007,003,Krajan,Karyawan Swasta,SMA,Kawin,3303706388702071,AKTIF
+Umar Bakri,3303070557526817,Laki-laki,Kebumen,1957-10-10,Kristen,Desa Sidaurip RT 002 RW 001 Dusun Sidaurip 1,002,001,Sidaurip 1,Petani,S1,Cerai Hidup,3303237791014787,AKTIF
+Vino Pratama,3303190418961081,Laki-laki,Banyumas,1950-06-17,Islam,Desa Sidaurip RT 007 RW 002 Dusun Sidaurip 2,007,002,Sidaurip 2,Pelajar/Mahasiswa,S1,Cerai Hidup,3303237791014787,AKTIF
+Cici Nurjanah,3303191206511964,Perempuan,Purwokerto,2004-09-24,Buddha,Desa Sidaurip RT 001 RW 001 Dusun Sidaurip 2,001,001,Sidaurip 2,Buruh Tani,SMP,Kawin,3303237791014787,AKTIF
+Eko Prasetyo Ahmad,3303200966477298,Laki-laki,Gandrungmangu,2003-04-21,Buddha,Desa Sidaurip RT 005 RW 002 Dusun Krajan,005,002,Krajan,Guru,D3,Cerai Hidup,3303237791014787,AKTIF
+Ani Nurhayati,3303171080611163,Perempuan,Banyumas,1943-02-17,Hindu,Desa Sidaurip RT 007 RW 005 Dusun Sidaurip 1,007,005,Sidaurip 1,Buruh Harian Lepas,Tidak/Belum Sekolah,Belum Kawin,3303849940385397,AKTIF
+Imam Maulana,3303020400333840,Laki-laki,Cilacap,1974-07-15,Katolik,Desa Sidaurip RT 008 RW 001 Dusun Sidaurip 3,008,001,Sidaurip 3,Petani,Tidak/Belum Sekolah,Cerai Mati,3303849940385397,AKTIF
+Tono Sukirman,3303280422972564,Laki-laki,Purwokerto,1950-03-18,Buddha,Desa Sidaurip RT 008 RW 001 Dusun Sidaurip 1,008,001,Sidaurip 1,Karyawan Swasta,S1,Cerai Mati,3303849940385397,AKTIF
+Vino Pratama,3303221215952247,Laki-laki,Cilacap,1973-10-03,Kristen,Desa Sidaurip RT 007 RW 003 Dusun Sidaurip 3,007,003,Sidaurip 3,Buruh Tani,Tidak/Belum Sekolah,Cerai Hidup,3303207641127879,AKTIF
+Budi Santoso Hendra,3303020417200768,Laki-laki,Purwokerto,2003-08-30,Islam,Desa Sidaurip RT 007 RW 003 Dusun Krajan,007,003,Krajan,Tidak Bekerja,S1,Belum Kawin,3303207641127879,AKTIF
+Dewi Lestari,3303280420453124,Perempuan,Kebumen,1975-08-26,Islam,Desa Sidaurip RT 001 RW 002 Dusun Pasar,001,002,Pasar,Karyawan Swasta,S2,Cerai Mati,3303207641127879,AKTIF
+Faridah Erna,3303260554343035,Perempuan,Gandrungmangu,2023-08-08,Katolik,Desa Sidaurip RT 007 RW 003 Dusun Pasar,007,003,Pasar,Belum/Tidak Bekerja,Tidak/Belum Sekolah,Belum Kawin,3303207641127879,AKTIF
+Wahyu Nugroho,3303080314359914,Laki-laki,Cilacap,2026-04-26,Hindu,Desa Sidaurip RT 007 RW 002 Dusun Sidaurip 3,007,002,Sidaurip 3,Belum/Tidak Bekerja,Tidak/Belum Sekolah,Belum Kawin,3303207641127879,AKTIF
+Rudi Hartono Gunawan,3303161022747287,Laki-laki,Kebumen,2003-12-27,Islam,Desa Sidaurip RT 002 RW 002 Dusun Sidaurip 3,002,002,Sidaurip 3,Pelajar/Mahasiswa,S2,Belum Kawin,3303921848584504,AKTIF
+Zaenab,3303080110872562,Perempuan,Purbalingga,1952-11-24,Katolik,Desa Sidaurip RT 004 RW 001 Dusun Krajan,004,001,Krajan,Guru,SMP,Kawin,3303921848584504,AKTIF
+Ratih Puspita,3303250312719093,Perempuan,Purbalingga,1958-12-20,Islam,Desa Sidaurip RT 003 RW 005 Dusun Sidaurip 2,003,005,Sidaurip 2,Buruh Tani,Tidak/Belum Sekolah,Cerai Hidup,3303921848584504,AKTIF
+Mimin Mintarsih,3303140575357320,Perempuan,Banyumas,2017-04-21,Islam,Desa Sidaurip RT 004 RW 002 Dusun Sidaurip 2,004,002,Sidaurip 2,Pelajar/Mahasiswa,SMA,Belum Kawin,3303921848584504,AKTIF
+Oki Saputra,3303100355607211,Laki-laki,Purbalingga,2000-01-08,Hindu,Desa Sidaurip RT 006 RW 005 Dusun Sidaurip 3,006,005,Sidaurip 3,Tidak Bekerja,S2,Cerai Mati,3303921848584504,AKTIF
+Indah Sari Qomariyah,3303030781462264,Perempuan,Kebumen,2025-01-18,Buddha,Desa Sidaurip RT 003 RW 004 Dusun Krajan,003,004,Krajan,Belum/Tidak Bekerja,Tidak/Belum Sekolah,Belum Kawin,3303650223740510,AKTIF
+Dwi Purnomo Gunawan,3303250382781817,Laki-laki,Purwokerto,1952-10-01,Kristen,Desa Sidaurip RT 003 RW 004 Dusun Sidaurip 1,003,004,Sidaurip 1,Pensiunan,SD,Belum Kawin,3303650223740510,AKTIF
+Hendro Susanto,3303190217652426,Laki-laki,Purwokerto,1959-03-29,Katolik,Desa Sidaurip RT 006 RW 005 Dusun Sidaurip 1,006,005,Sidaurip 1,Tidak Bekerja,S2,Kawin,3303650223740510,AKTIF
+Slamet Riyadi,3303100804590360,Laki-laki,Cilacap,2012-07-11,Kristen,Desa Sidaurip RT 005 RW 003 Dusun Pasar,005,003,Pasar,Pelajar/Mahasiswa,SMA,Belum Kawin,3303446328072759,AKTIF
+Iin Inayah Dewi,3303190611916299,Perempuan,Purbalingga,1999-02-09,Kristen,Desa Sidaurip RT 003 RW 003 Dusun Sidaurip 2,003,003,Sidaurip 2,Ibu Rumah Tangga,Tidak/Belum Sekolah,Cerai Mati,3303446328072759,AKTIF
+Heni Susanti,3303070394508866,Perempuan,Cilacap,1949-07-22,Hindu,Desa Sidaurip RT 004 RW 001 Dusun Sidaurip 2,004,001,Sidaurip 2,Buruh Harian Lepas,S2,Cerai Mati,3303446328072759,AKTIF
+Bambang Widodo Dedi,3303090796486560,Laki-laki,Kebumen,1997-06-06,Katolik,Desa Sidaurip RT 002 RW 002 Dusun Sidaurip 2,002,002,Sidaurip 2,Karyawan Swasta,Tidak/Belum Sekolah,Cerai Mati,3303446328072759,AKTIF
+Juleha,3303090810741362,Perempuan,Cilacap,2011-11-19,Katolik,Desa Sidaurip RT 005 RW 002 Dusun Sidaurip 3,005,002,Sidaurip 3,Pelajar/Mahasiswa,SMP,Belum Kawin,3303446328072759,AKTIF
+Rini Astuti,3303080662142955,Perempuan,Banyumas,2003-04-29,Hindu,Desa Sidaurip RT 006 RW 001 Dusun Sidaurip 3,006,001,Sidaurip 3,Pensiunan,Tidak/Belum Sekolah,Belum Kawin,3303507595382933,AKTIF
+Fitri Handayani,3303110988132508,Perempuan,Purwokerto,1965-08-14,Buddha,Desa Sidaurip RT 006 RW 002 Dusun Pasar,006,002,Pasar,Ibu Rumah Tangga,S1,Cerai Mati,3303507595382933,AKTIF
+Yeni Rohaeni,3303190377967429,Perempuan,Gandrungmangu,1966-10-01,Islam,Desa Sidaurip RT 001 RW 005 Dusun Sidaurip 1,001,005,Sidaurip 1,Ibu Rumah Tangga,S2,Kawin,3303507595382933,AKTIF
+Fitri Handayani,3303140419886008,Perempuan,Banyumas,2003-07-20,Hindu,Desa Sidaurip RT 008 RW 004 Dusun Sidaurip 3,008,004,Sidaurip 3,Ibu Rumah Tangga,SMA,Belum Kawin,3303507595382933,AKTIF
+Ahmad Fauzi,3303230912493043,Laki-laki,Kebumen,1973-12-05,Hindu,Desa Sidaurip RT 004 RW 004 Dusun Sidaurip 3,004,004,Sidaurip 3,Pedagang,SD,Cerai Hidup,3303144882185433,AKTIF
+Juleha Neneng,3303231013944294,Perempuan,Purwokerto,1997-06-02,Buddha,Desa Sidaurip RT 004 RW 002 Dusun Sidaurip 1,004,002,Sidaurip 1,Ibu Rumah Tangga,SMP,Cerai Mati,3303144882185433,AKTIF
+Wahyu Nugroho,3303061284248746,Laki-laki,Purbalingga,2017-06-27,Islam,Desa Sidaurip RT 006 RW 003 Dusun Sidaurip 1,006,003,Sidaurip 1,Pelajar/Mahasiswa,SMA,Belum Kawin,3303144882185433,AKTIF
+Ginanjar Eko,3303271073699738,Laki-laki,Purwokerto,1981-08-20,Buddha,Desa Sidaurip RT 008 RW 004 Dusun Pasar,008,004,Pasar,Wiraswasta,S2,Kawin,3303355171711892,AKTIF
+Parto Suparman Dedi,3303200610910370,Laki-laki,Banyumas,1986-12-13,Katolik,Desa Sidaurip RT 005 RW 004 Dusun Sidaurip 2,005,004,Sidaurip 2,Guru,S1,Belum Kawin,3303355171711892,AKTIF
+Catur Wibowo,3303220510801607,Laki-laki,Banyumas,1976-09-27,Buddha,Desa Sidaurip RT 004 RW 001 Dusun Sidaurip 3,004,001,Sidaurip 3,Pedagang,SMA,Belum Kawin,3303329150139842,AKTIF
+Nanang Hadi,3303250613676825,Laki-laki,Cilacap,2000-01-03,Islam,Desa Sidaurip RT 005 RW 004 Dusun Krajan,005,004,Krajan,Wiraswasta,D3,Belum Kawin,3303329150139842,AKTIF
+Hadi Sucipto Komarudin,3303160877502190,Laki-laki,Cilacap,2009-03-18,Hindu,Desa Sidaurip RT 003 RW 004 Dusun Krajan,003,004,Krajan,Pelajar/Mahasiswa,SMP,Belum Kawin,3303577216133416,AKTIF
+Slamet Riyadi,3303220874683497,Laki-laki,Purbalingga,1998-05-14,Katolik,Desa Sidaurip RT 002 RW 004 Dusun Pasar,002,004,Pasar,Guru,S1,Kawin,3303577216133416,AKTIF
+Lilis Suryani,3303240358282207,Perempuan,Gandrungmangu,1990-12-09,Buddha,Desa Sidaurip RT 005 RW 005 Dusun Sidaurip 3,005,005,Sidaurip 3,Ibu Rumah Tangga,SD,Kawin,3303577216133416,AKTIF
+Tuti Alawiyah,3303130309412921,Perempuan,Purwokerto,1990-07-30,Hindu,Desa Sidaurip RT 002 RW 002 Dusun Sidaurip 3,002,002,Sidaurip 3,Ibu Rumah Tangga,SMP,Cerai Hidup,3303577216133416,AKTIF
+Herlina,3303080802755505,Perempuan,Purbalingga,1989-08-30,Hindu,Desa Sidaurip RT 002 RW 001 Dusun Sidaurip 1,002,001,Sidaurip 1,Ibu Rumah Tangga,S1,Belum Kawin,3303577216133416,AKTIF
+Agus Setiawan,3303160465467089,Laki-laki,Purbalingga,1967-10-11,Kristen,Desa Sidaurip RT 003 RW 002 Dusun Sidaurip 2,003,002,Sidaurip 2,Sopir,S1,Kawin,3303640985423935,AKTIF
+Nanang Hadi,3303010806245967,Laki-laki,Kebumen,2022-06-09,Hindu,Desa Sidaurip RT 004 RW 002 Dusun Sidaurip 3,004,002,Sidaurip 3,Belum/Tidak Bekerja,Tidak/Belum Sekolah,Belum Kawin,3303640985423935,AKTIF
+Dedi Kurniawan Hendra,3303140482908753,Laki-laki,Kebumen,2010-01-18,Hindu,Desa Sidaurip RT 007 RW 005 Dusun Pasar,007,005,Pasar,Pelajar/Mahasiswa,SMP,Belum Kawin,3303640985423935,AKTIF
+Irfan Hakim,3303240921534210,Laki-laki,Banyumas,1962-06-18,Hindu,Desa Sidaurip RT 001 RW 004 Dusun Sidaurip 3,001,004,Sidaurip 3,Tukang Bangunan,SMA,Kawin,3303856962740334,AKTIF
+Kholid Ahmad,3303280491521777,Laki-laki,Purbalingga,1984-09-27,Kristen,Desa Sidaurip RT 007 RW 005 Dusun Krajan,007,005,Krajan,Pensiunan,SD,Cerai Mati,3303856962740334,AKTIF
+Oni Rosita,3303171121195520,Perempuan,Purbalingga,1952-05-26,Kristen,Desa Sidaurip RT 004 RW 002 Dusun Krajan,004,002,Krajan,Wiraswasta,D3,Cerai Mati,3303856962740334,AKTIF
+Erna Wati,3303040112265089,Perempuan,Purwokerto,2024-07-09,Katolik,Desa Sidaurip RT 005 RW 005 Dusun Sidaurip 1,005,005,Sidaurip 1,Belum/Tidak Bekerja,Tidak/Belum Sekolah,Belum Kawin,3303839423506532,AKTIF
+Yanto Hermawan Hadi,3303230252847877,Laki-laki,Cilacap,1985-10-27,Kristen,Desa Sidaurip RT 008 RW 005 Dusun Sidaurip 1,008,005,Sidaurip 1,Tidak Bekerja,SD,Cerai Mati,3303839423506532,AKTIF
+Gunawan,3303170966382016,Laki-laki,Purwokerto,1968-03-21,Katolik,Desa Sidaurip RT 003 RW 001 Dusun Sidaurip 1,003,001,Sidaurip 1,Tukang Bangunan,Tidak/Belum Sekolah,Cerai Mati,3303839423506532,AKTIF
+Diah Ayu Kartini,3303190509201004,Perempuan,Gandrungmangu,1983-12-12,Kristen,Desa Sidaurip RT 006 RW 003 Dusun Sidaurip 3,006,003,Sidaurip 3,Ibu Rumah Tangga,SMP,Cerai Mati,3303865077236665,AKTIF
+Neng Hasanah,3303200514819159,Perempuan,Purbalingga,2021-10-28,Hindu,Desa Sidaurip RT 002 RW 002 Dusun Sidaurip 2,002,002,Sidaurip 2,Belum/Tidak Bekerja,Tidak/Belum Sekolah,Belum Kawin,3303865077236665,AKTIF
+Nanang Hadi,3303130509587887,Laki-laki,Purbalingga,2012-10-29,Kristen,Desa Sidaurip RT 002 RW 003 Dusun Pasar,002,003,Pasar,Pelajar/Mahasiswa,SMP,Belum Kawin,3303976405959809,AKTIF
+Cici Nurjanah,3303190910518431,Perempuan,Purbalingga,1955-04-15,Katolik,Desa Sidaurip RT 001 RW 005 Dusun Pasar,001,005,Pasar,Pensiunan,S1,Kawin,3303976405959809,AKTIF
+Gita Permatasari,3303030988362813,Perempuan,Purwokerto,2004-07-06,Kristen,Desa Sidaurip RT 003 RW 002 Dusun Pasar,003,002,Pasar,Guru,S2,Cerai Mati,3303408518515957,AKTIF
+Juleha,3303100497305299,Perempuan,Purwokerto,1968-08-22,Hindu,Desa Sidaurip RT 006 RW 005 Dusun Sidaurip 1,006,005,Sidaurip 1,Pensiunan,SMA,Kawin,3303408518515957,AKTIF
+Hendra Wijaya Hadi,3303050804930203,Laki-laki,Gandrungmangu,2009-02-03,Katolik,Desa Sidaurip RT 004 RW 004 Dusun Sidaurip 1,004,004,Sidaurip 1,Pelajar/Mahasiswa,SD,Belum Kawin,3303300670211943,AKTIF
+Juleha,3303190208548422,Perempuan,Kebumen,1959-08-28,Hindu,Desa Sidaurip RT 003 RW 002 Dusun Krajan,003,002,Krajan,Ibu Rumah Tangga,S2,Belum Kawin,3303300670211943,AKTIF
+Umar Bakri Muhamad,3303271223932027,Laki-laki,Purwokerto,1947-07-30,Buddha,Desa Sidaurip RT 006 RW 002 Dusun Sidaurip 1,006,002,Sidaurip 1,Pedagang,SD,Kawin,3303300670211943,AKTIF
+Hendra Wijaya,3303240886645943,Laki-laki,Kebumen,1968-06-14,Kristen,Desa Sidaurip RT 003 RW 004 Dusun Sidaurip 1,003,004,Sidaurip 1,Pedagang,SMA,Kawin,3303300670211943,AKTIF
+Dwi Purnomo,3303100551959141,Laki-laki,Purbalingga,1976-09-13,Islam,Desa Sidaurip RT 002 RW 004 Dusun Pasar,002,004,Pasar,Buruh Tani,SMP,Cerai Hidup,3303879084640251,AKTIF
+Bambang Widodo,3303120409508183,Laki-laki,Gandrungmangu,1945-03-18,Kristen,Desa Sidaurip RT 003 RW 004 Dusun Pasar,003,004,Pasar,Wiraswasta,Tidak/Belum Sekolah,Cerai Mati,3303879084640251,AKTIF
+Qomariyah,3303211099332363,Perempuan,Kebumen,1952-09-02,Buddha,Desa Sidaurip RT 003 RW 005 Dusun Sidaurip 3,003,005,Sidaurip 3,Ibu Rumah Tangga,SD,Cerai Hidup,3303279600453602,AKTIF
+Oom Komariah Erna,3303080374429246,Perempuan,Gandrungmangu,1997-05-29,Katolik,Desa Sidaurip RT 005 RW 003 Dusun Sidaurip 2,005,003,Sidaurip 2,Ibu Rumah Tangga,S1,Kawin,3303279600453602,AKTIF
+Tono Sukirman Nur,3303060986689321,Laki-laki,Kebumen,1941-08-18,Buddha,Desa Sidaurip RT 001 RW 004 Dusun Krajan,001,004,Krajan,Pelajar/Mahasiswa,S2,Belum Kawin,3303831727247813,AKTIF
+Karsih,3303140563672928,Perempuan,Gandrungmangu,1997-04-09,Islam,Desa Sidaurip RT 004 RW 001 Dusun Krajan,004,001,Krajan,Karyawan Swasta,SMP,Belum Kawin,3303831727247813,AKTIF
+Rudi Hartono,3303200895683437,Laki-laki,Banyumas,2024-09-23,Buddha,Desa Sidaurip RT 008 RW 005 Dusun Sidaurip 2,008,005,Sidaurip 2,Belum/Tidak Bekerja,Tidak/Belum Sekolah,Belum Kawin,3303232003605575,AKTIF
+Juleha,3303230222954796,Perempuan,Cilacap,2016-02-21,Hindu,Desa Sidaurip RT 004 RW 004 Dusun Krajan,004,004,Krajan,Pelajar/Mahasiswa,SMA,Belum Kawin,3303232003605575,AKTIF
+Juleha Poppy,3303120891839758,Perempuan,Banyumas,1945-03-11,Kristen,Desa Sidaurip RT 002 RW 002 Dusun Pasar,002,002,Pasar,Ibu Rumah Tangga,S2,Belum Kawin,3303157888640511,AKTIF
+Edi Suharto Lukman,3303030960517241,Laki-laki,Kebumen,1967-09-12,Katolik,Desa Sidaurip RT 006 RW 002 Dusun Pasar,006,002,Pasar,Sopir,D3,Cerai Mati,3303157888640511,AKTIF
+Qomarudin,3303180780200070,Laki-laki,Banyumas,1988-10-16,Buddha,Desa Sidaurip RT 004 RW 002 Dusun Krajan,004,002,Krajan,Pelajar/Mahasiswa,Tidak/Belum Sekolah,Cerai Mati,3303157888640511,AKTIF
+Kartini,3303081163116085,Perempuan,Gandrungmangu,2009-02-17,Hindu,Desa Sidaurip RT 008 RW 002 Dusun Sidaurip 1,008,002,Sidaurip 1,Pelajar/Mahasiswa,SD,Belum Kawin,3303157888640511,AKTIF
+Ginanjar,3303191050281930,Laki-laki,Gandrungmangu,2004-01-17,Hindu,Desa Sidaurip RT 002 RW 005 Dusun Sidaurip 2,002,005,Sidaurip 2,Tukang Bangunan,Tidak/Belum Sekolah,Cerai Hidup,3303157888640511,AKTIF
+Siti Aisyah,3303080417979778,Perempuan,Cilacap,1970-10-06,Islam,Desa Sidaurip RT 004 RW 004 Dusun Pasar,004,004,Pasar,Ibu Rumah Tangga,S1,Kawin,3303503273219555,AKTIF
+Dewi Lestari,3303130494840902,Perempuan,Purwokerto,1981-09-02,Islam,Desa Sidaurip RT 004 RW 005 Dusun Krajan,004,005,Krajan,Karyawan Swasta,D3,Kawin,3303503273219555,AKTIF
+Bambang Widodo,3303071105135251,Laki-laki,Gandrungmangu,1976-10-26,Islam,Desa Sidaurip RT 006 RW 002 Dusun Sidaurip 1,006,002,Sidaurip 1,Buruh Harian Lepas,SMA,Cerai Mati,3303503273219555,AKTIF
+Qomariyah,3303280601140605,Perempuan,Purwokerto,1970-06-25,Hindu,Desa Sidaurip RT 003 RW 005 Dusun Sidaurip 1,003,005,Sidaurip 1,Tidak Bekerja,S1,Kawin,3303503273219555,AKTIF
+Yeni Rohaeni,3303180316294766,Perempuan,Purwokerto,1942-10-16,Hindu,Desa Sidaurip RT 007 RW 005 Dusun Krajan,007,005,Krajan,Ibu Rumah Tangga,SMA,Kawin,3303503273219555,AKTIF
+Mimin Mintarsih Dewi,3303030622993463,Perempuan,Banyumas,2014-07-13,Hindu,Desa Sidaurip RT 004 RW 003 Dusun Sidaurip 2,004,003,Sidaurip 2,Pelajar/Mahasiswa,SMA,Belum Kawin,3303508907863320,AKTIF
+Mimin Mintarsih Indah,3303020999191625,Perempuan,Gandrungmangu,1964-11-09,Islam,Desa Sidaurip RT 005 RW 001 Dusun Krajan,005,001,Krajan,Pedagang,SMP,Cerai Mati,3303508907863320,AKTIF
+Firman Hidayat,3303050404691340,Laki-laki,Kebumen,2025-04-14,Buddha,Desa Sidaurip RT 002 RW 005 Dusun Sidaurip 1,002,005,Sidaurip 1,Belum/Tidak Bekerja,Tidak/Belum Sekolah,Belum Kawin,3303508907863320,AKTIF
+Budi Santoso,3303150615837503,Laki-laki,Kebumen,2007-04-08,Buddha,Desa Sidaurip RT 006 RW 002 Dusun Krajan,006,002,Krajan,Pelajar/Mahasiswa,SD,Cerai Hidup,3303702195326811,AKTIF
+Imam Maulana,3303150696822458,Laki-laki,Purbalingga,1968-04-26,Katolik,Desa Sidaurip RT 006 RW 001 Dusun Sidaurip 1,006,001,Sidaurip 1,PNS,Tidak/Belum Sekolah,Belum Kawin,3303702195326811,AKTIF
+Gita Permatasari,3303220462269007,Perempuan,Kebumen,1983-04-07,Hindu,Desa Sidaurip RT 008 RW 004 Dusun Krajan,008,004,Krajan,Ibu Rumah Tangga,S1,Cerai Hidup,3303424312676924,AKTIF
+Firman Hidayat Dedi,3303260288664749,Laki-laki,Gandrungmangu,1969-09-25,Kristen,Desa Sidaurip RT 004 RW 003 Dusun Sidaurip 1,004,003,Sidaurip 1,Guru,S1,Belum Kawin,3303424312676924,AKTIF
+Nur Hasan,3303220424863290,Laki-laki,Cilacap,1963-05-06,Katolik,Desa Sidaurip RT 007 RW 005 Dusun Sidaurip 3,007,005,Sidaurip 3,Buruh Tani,S2,Cerai Mati,3303424312676924,AKTIF
+Oni Rosita,3303080414965225,Perempuan,Purwokerto,1974-10-16,Katolik,Desa Sidaurip RT 006 RW 001 Dusun Krajan,006,001,Krajan,Ibu Rumah Tangga,SMA,Cerai Hidup,3303706388702071,AKTIF
+Gunawan,3303131196510416,Laki-laki,Purwokerto,1987-06-16,Katolik,Desa Sidaurip RT 003 RW 004 Dusun Krajan,003,004,Krajan,Tukang Bangunan,D3,Kawin,3303706388702071,AKTIF
+Euis Suhartini,3303090299586937,Perempuan,Cilacap,1945-02-22,Buddha,Desa Sidaurip RT 003 RW 005 Dusun Sidaurip 2,003,005,Sidaurip 2,Ibu Rumah Tangga,D3,Kawin,3303706388702071,AKTIF
+Ratih Puspita,3303021151318436,Perempuan,Banyumas,1947-07-07,Katolik,Desa Sidaurip RT 003 RW 003 Dusun Sidaurip 2,003,003,Sidaurip 2,Karyawan Swasta,S2,Belum Kawin,3303237791014787,AKTIF
+Komarudin,3303051255743822,Laki-laki,Kebumen,1997-12-28,Hindu,Desa Sidaurip RT 001 RW 002 Dusun Sidaurip 3,001,002,Sidaurip 3,Wiraswasta,S1,Cerai Hidup,3303237791014787,AKTIF
+Beti Marlina,3303240106847533,Perempuan,Kebumen,2006-11-15,Buddha,Desa Sidaurip RT 004 RW 001 Dusun Sidaurip 3,004,001,Sidaurip 3,Buruh Tani,SD,Kawin,3303237791014787,AKTIF

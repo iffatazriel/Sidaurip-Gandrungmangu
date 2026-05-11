@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const navItems = [
   { label: "Beranda", href: "/" },
@@ -25,10 +25,6 @@ function isActivePath(pathname: string, href: string) {
 export default function Header() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  useEffect(() => {
-    setIsMenuOpen(false);
-  }, [pathname]);
 
   return (
     <nav className="fixed top-0 z-50 w-full bg-white/85 shadow-sm backdrop-blur-md transition-colors duration-200">
@@ -69,7 +65,13 @@ export default function Header() {
           })}
         </div>
 
-        <div className="hidden lg:block">
+        <div className="hidden items-center gap-3 lg:flex">
+          <Link
+            className="rounded-lg px-4 py-2.5 text-sm font-semibold text-blue-900 transition hover:bg-blue-50"
+            href="/login"
+          >
+            Login
+          </Link>
           <Link
             className="rounded-lg bg-primary-container px-4 py-2.5 text-sm font-semibold text-on-primary transition-all hover:opacity-90 sm:px-6 sm:text-base"
             href="/layanan-mandiri"
@@ -101,6 +103,7 @@ export default function Header() {
                 <Link
                   key={item.label}
                   href={item.href}
+                  onClick={() => setIsMenuOpen(false)}
                   aria-current={isActive ? "page" : undefined}
                   className={
                     isActive
@@ -114,7 +117,16 @@ export default function Header() {
             })}
 
             <Link
+              href="/login"
+              onClick={() => setIsMenuOpen(false)}
+              className="rounded-lg px-4 py-3 text-center text-sm font-semibold text-blue-900 transition hover:bg-slate-100"
+            >
+              Login
+            </Link>
+
+            <Link
               href="/layanan-mandiri"
+              onClick={() => setIsMenuOpen(false)}
               className="mt-2 rounded-lg bg-primary-container px-4 py-3 text-center text-sm font-semibold text-on-primary transition-all hover:opacity-90"
             >
               Layanan Mandiri

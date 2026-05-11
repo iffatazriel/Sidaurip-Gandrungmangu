@@ -1,0 +1,145 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Resident {
+  id           Int       @id @default(autoincrement())
+  nama         String
+  nik          String    @unique
+  jenisKelamin String
+  tempatLahir  String?
+  tanggalLahir DateTime? @db.Date
+  agama        String?
+  alamat       String
+  rt           String?
+  rw           String?
+  dusun        String?
+  pekerjaan    String?
+  pendidikan   String?
+  statusKawin  String?
+  noKK         String?
+  status       String    @default("AKTIF")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User?
+
+  @@index([nama])
+  @@index([noKK])
+  @@index([dusun])
+  @@index([rt, rw])
+  @@index([jenisKelamin])
+  @@map("residents")
+}
+
+model User {
+  id           Int       @id @default(autoincrement())
+  nik          String    @unique
+  name         String
+  phone        String?
+  passwordHash String    @map("password_hash")
+  role         String    @default("CITIZEN")
+  status       String    @default("PENDING")
+
+  residentId Int?      @unique @map("resident_id")
+  resident   Resident? @relation(fields: [residentId], references: [id], onDelete: SetNull)
+  sessions   UserSession[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([role])
+  @@index([status])
+  @@map("users")
+}
+
+model UserSession {
+  id        Int      @id @default(autoincrement())
+  tokenHash String   @unique @map("token_hash")
+  userId    Int      @map("user_id")
+  expiresAt DateTime @map("expires_at")
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("user_sessions")
+}
+
+model NewsPost {
+  id          Int       @id @default(autoincrement())
+  title       String
+  slug        String    @unique
+  author      String
+  category    String
+  excerpt     String?
+  content     String
+  imageUrl    String?   @map("image_url")
+  status      String    @default("DRAFT")
+  publishedAt DateTime? @map("published_at")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([title])
+  @@index([category])
+  @@index([status])
+  @@map("news_posts")
+}
+
+model ServiceRequest {
+  id             Int       @id @default(autoincrement())
+  trackingNumber String    @unique @map("tracking_number")
+  serviceType    String    @map("service_type")
+  applicantName  String    @map("applicant_name")
+  nik            String
+  phone          String?
+  address        String?
+  notes          String?
+  status         String    @default("PENDING")
+  adminNote      String?   @map("admin_note")
+  documentNote   String?   @map("document_note")
+  rejectionReason String?  @map("rejection_reason")
+  completedAt    DateTime? @map("completed_at")
+  documents      ServiceRequestDocument[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([nik])
+  @@index([trackingNumber])
+  @@index([status])
+  @@index([serviceType])
+  @@map("service_requests")
+}
+
+model ServiceRequestDocument {
+  id               Int            @id @default(autoincrement())
+  serviceRequestId Int            @map("service_request_id")
+  name             String
+  fileUrl          String         @map("file_url")
+  fileName         String         @map("file_name")
+  mimeType         String?        @map("mime_type")
+  size             Int?
+  status           String         @default("PENDING")
+  note             String?
+
+  serviceRequest ServiceRequest @relation(fields: [serviceRequestId], references: [id], onDelete: Cascade)
+  uploadedAt     DateTime       @default(now()) @map("uploaded_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+
+  @@index([serviceRequestId])
+  @@index([status])
+  @@map("service_request_documents")
+}

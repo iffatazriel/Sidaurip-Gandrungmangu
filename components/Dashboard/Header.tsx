@@ -1,55 +1,81 @@
-import React from "react";
+"use client";
+
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { FormEvent, useState } from "react";
 
 export default function Header() {
+  const router = useRouter();
+  const [search, setSearch] = useState("");
+
+  const handleSearch = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const query = search.trim();
+
+    if (query) {
+      router.push(`/dashboard/kelolaberita?search=${encodeURIComponent(query)}`);
+    }
+  };
+
   return (
-    <header className="flex items-center justify-between px-8 py-3 w-full border-b border-slate-100 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl sticky top-0 z-40">
+    <header className="sticky top-0 z-40 flex w-full items-center justify-between border-b border-slate-100 bg-white/80 px-8 py-3 backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/80">
       <div className="flex items-center gap-6">
-        <h2 className="text-xl font-bold text-blue-900 dark:text-white uppercase tracking-wider font-['Plus_Jakarta_Sans']">
+        <Link
+          href="/dashboard"
+          className="font-['Plus_Jakarta_Sans'] text-xl font-bold uppercase tracking-wider text-blue-900 dark:text-white"
+        >
           Civic Sanctuary Console
-        </h2>
-        <div className="hidden md:flex relative">
+        </Link>
+        <form className="relative hidden md:flex" onSubmit={handleSearch}>
           <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
             search
           </span>
           <input
-            className="pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-800 border-none rounded-full text-sm w-64 focus:ring-2 focus:ring-blue-900/20"
-            placeholder="Search services or requests..."
+            className="w-64 rounded-full border-none bg-slate-100 py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-blue-900/20 dark:bg-slate-800"
+            placeholder="Search news records..."
             type="text"
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
           />
-        </div>
+        </form>
       </div>
       <div className="flex items-center gap-4">
-        <button className="p-2 text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-full transition-colors relative">
-          <span className="material-symbols-outlined" data-icon="notifications">
-            notifications
-          </span>
-          <span className="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
-        </button>
-        <button className="p-2 text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-full transition-colors">
-          <span className="material-symbols-outlined" data-icon="mail">
-            mail
-          </span>
-        </button>
-        <button className="p-2 text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-full transition-colors">
-          <span className="material-symbols-outlined" data-icon="help">
-            help
-          </span>
-        </button>
-        <div className="h-8 w-px bg-slate-100 dark:bg-slate-800 mx-2"></div>
+        <Link
+          href="/dashboard/kelolaberita"
+          className="relative rounded-full p-2 text-slate-500 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50"
+          title="News records"
+        >
+          <span className="material-symbols-outlined">notifications</span>
+          <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-error" />
+        </Link>
+        <Link
+          href="/dashboard/kelolapenduduk"
+          className="rounded-full p-2 text-slate-500 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50"
+          title="Resident registry"
+        >
+          <span className="material-symbols-outlined">mail</span>
+        </Link>
+        <Link
+          href="/dashboard"
+          className="rounded-full p-2 text-slate-500 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50"
+          title="Dashboard overview"
+        >
+          <span className="material-symbols-outlined">help</span>
+        </Link>
+        <div className="mx-2 h-8 w-px bg-slate-100 dark:bg-slate-800" />
         <div className="flex items-center gap-3">
           <div className="text-right">
             <p className="text-xs font-bold text-blue-900 dark:text-blue-100">
               Admin Utama
             </p>
-            <p className="text-[10px] text-slate-500 uppercase tracking-tighter">
+            <p className="text-[10px] uppercase tracking-tighter text-slate-500">
               Office Level 4
             </p>
           </div>
           <Image
             alt="Administrator Profile"
-            className="w-10 h-10 rounded-full object-cover border-2 border-primary-container"
-            data-alt="professional portrait of a confident male government administrator in a clean office setting with soft natural light"
+            className="h-10 w-10 rounded-full border-2 border-primary-container object-cover"
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmb1H0GQcwkLNKIdhMNAIwmdeqNQ5_2STlOCgQkUa_KQNNvgJSswKJWesYbr8UjFDMuB0z-brIDOk5hat0-PyTHEonSZHE5LJhNXe5uLaBFnYPWblFXA8fayR-3gKp9GIG491P2H9vqJXt3Do1pAusqJHjCp8iKSfT198Ac0USRUobgLCesqei7osOWChY4YH0a1aONMi7MANA7cUrPNV7p9MOxi_tOSM76tzl5bVtgUe4x80LYfiUz3oknIv9YSEB0ALBX5XMLQ"
             width={40}
             height={40}

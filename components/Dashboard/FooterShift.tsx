@@ -1,32 +1,32 @@
-import React from "react";
+import Link from "next/link";
 
 export default function FooterShift() {
   return (
     <div>
-      <footer className="mt-auto p-8 bg-surface-container-low border-t border-slate-200/50">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-slate-400 font-medium">
+      <footer className="mt-auto border-t border-slate-200/50 bg-surface-container-low p-8">
+        <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+          <p className="text-sm font-medium text-slate-400">
             © 2026 Balaidesa Digital. Part of the Civic Sanctuary Initiative.
           </p>
           <div className="flex items-center gap-6">
-            <a
-              className="text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-primary transition-colors"
-              href="#"
+            <Link
+              className="text-xs font-bold uppercase tracking-widest text-slate-500 transition-colors hover:text-primary"
+              href="/dashboard"
             >
-              Compliance
-            </a>
-            <a
-              className="text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-primary transition-colors"
-              href="#"
+              Overview
+            </Link>
+            <Link
+              className="text-xs font-bold uppercase tracking-widest text-slate-500 transition-colors hover:text-primary"
+              href="/dashboard/kelolapenduduk"
             >
-              Privacy Policy
-            </a>
-            <a
-              className="text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-primary transition-colors"
-              href="#"
+              Residents
+            </Link>
+            <Link
+              className="text-xs font-bold uppercase tracking-widest text-slate-500 transition-colors hover:text-primary"
+              href="/dashboard/kelolaberita"
             >
-              System Health
-            </a>
+              News
+            </Link>
           </div>
         </div>
       </footer>

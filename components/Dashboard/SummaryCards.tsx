@@ -1,98 +1,89 @@
-import React from "react";
+import type { DashboardSummary } from "./types";
 
-export default function SummaryCards() {
+type SummaryCardsProps = {
+  summary: DashboardSummary;
+};
+
+export default function SummaryCards({ summary }: SummaryCardsProps) {
   return (
-    <div className="p-8 space-y-12">
+    <div className="space-y-12 p-8">
       <section>
-        <div className="flex items-end justify-between mb-8">
+        <div className="mb-8 flex items-end justify-between">
           <div>
-            <p className="text-tertiary font-bold tracking-widest text-xs uppercase mb-2">
+            <p className="mb-2 text-xs font-bold uppercase tracking-widest text-tertiary">
               Morning, Administrator
             </p>
-            <h3 className="text-4xl font-headline font-extrabold text-primary tracking-tight">
+            <h3 className="font-headline text-4xl font-extrabold tracking-tight text-primary">
               Executive Summary
             </h3>
           </div>
-          <div className="bg-surface-container-lowest p-1 rounded-lg shadow-sm hidden md:flex items-center">
-            <button className="px-4 py-2 bg-primary-container text-on-primary rounded-md text-xs font-bold uppercase tracking-wider">
-              Today
-            </button>
-            <button className="px-4 py-2 text-slate-500 text-xs font-bold uppercase tracking-wider">
-              Weekly
-            </button>
-            <button className="px-4 py-2 text-slate-500 text-xs font-bold uppercase tracking-wider">
-              Monthly
-            </button>
+          <div className="hidden items-center rounded-lg bg-surface-container-lowest p-1 shadow-sm md:flex">
+            <span className="rounded-md bg-primary-container px-4 py-2 text-xs font-bold uppercase tracking-wider text-on-primary">
+              Live
+            </span>
+            <span className="px-4 py-2 text-xs font-bold uppercase tracking-wider text-slate-500">
+              Database
+            </span>
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="bg-surface-container-lowest p-8 rounded-2xl relative overflow-hidden group hover:bg-surface-bright transition-all duration-300">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+          <div className="group relative overflow-hidden rounded-2xl bg-surface-container-lowest p-8 transition-all duration-300 hover:bg-surface-bright">
             <div className="absolute top-0 right-0 p-6 text-primary/10">
-              <span
-                className="material-symbols-outlined scale-[4]"
-                data-icon="newspaper"
-              >
+              <span className="material-symbols-outlined scale-[4]">
                 newspaper
               </span>
             </div>
             <div className="relative z-10">
-              <p className="text-slate-500 font-medium mb-1">
-                Total News Published
-              </p>
-              <h4 className="text-5xl font-extrabold text-primary mb-4 tracking-tighter">
-                1,284
+              <p className="mb-1 font-medium text-slate-500">Published News</p>
+              <h4 className="mb-4 text-5xl font-extrabold tracking-tighter text-primary">
+                {summary.publishedNews.toLocaleString("id-ID")}
               </h4>
-              <div className="flex items-center gap-2 text-secondary font-bold text-sm">
+              <div className="flex items-center gap-2 text-sm font-bold text-secondary">
                 <span className="material-symbols-outlined text-sm">
                   trending_up
                 </span>
-                <span>+12.5% vs last month</span>
+                <span>{summary.draftNews} draft waiting</span>
               </div>
             </div>
           </div>
-          <div className="bg-surface-container-lowest p-8 rounded-2xl relative overflow-hidden group hover:bg-surface-bright transition-all duration-300">
+          <div className="group relative overflow-hidden rounded-2xl bg-surface-container-lowest p-8 transition-all duration-300 hover:bg-surface-bright">
             <div className="absolute top-0 right-0 p-6 text-tertiary-container/10">
-              <span
-                className="material-symbols-outlined scale-[4]"
-                data-icon="pending_actions"
-              >
+              <span className="material-symbols-outlined scale-[4]">
                 pending_actions
               </span>
             </div>
             <div className="relative z-10">
-              <p className="text-slate-500 font-medium mb-1">
-                Pending Requests
-              </p>
-              <h4 className="text-5xl font-extrabold text-primary mb-4 tracking-tighter">
-                42
+              <p className="mb-1 font-medium text-slate-500">Draft News</p>
+              <h4 className="mb-4 text-5xl font-extrabold tracking-tighter text-primary">
+                {summary.draftNews.toLocaleString("id-ID")}
               </h4>
-              <div className="flex items-center gap-2 text-error font-bold text-sm">
+              <div className="flex items-center gap-2 text-sm font-bold text-error">
                 <span className="material-symbols-outlined text-sm">timer</span>
-                <span>8 require urgent review</span>
+                <span>Need review before publishing</span>
               </div>
             </div>
           </div>
-          <div className="bg-surface-container-lowest p-8 rounded-2xl relative overflow-hidden group hover:bg-surface-bright transition-all duration-300">
+          <div className="group relative overflow-hidden rounded-2xl bg-surface-container-lowest p-8 transition-all duration-300 hover:bg-surface-bright">
             <div className="absolute top-0 right-0 p-6 text-secondary/10">
-              <span
-                className="material-symbols-outlined scale-[4]"
-                data-icon="assignment_ind"
-              >
+              <span className="material-symbols-outlined scale-[4]">
                 assignment_ind
               </span>
             </div>
             <div className="relative z-10">
-              <p className="text-slate-500 font-medium mb-1">
-                New Citizen Reports
+              <p className="mb-1 font-medium text-slate-500">
+                Citizen Registry
               </p>
-              <h4 className="text-5xl font-extrabold text-primary mb-4 tracking-tighter">
-                156
+              <h4 className="mb-4 text-5xl font-extrabold tracking-tighter text-primary">
+                {summary.totalResidents.toLocaleString("id-ID")}
               </h4>
-              <div className="flex items-center gap-2 text-secondary font-bold text-sm">
+              <div className="flex items-center gap-2 text-sm font-bold text-secondary">
                 <span className="material-symbols-outlined text-sm">
                   check_circle
                 </span>
-                <span>92% resolution rate</span>
+                <span>
+                  {summary.activeResidents.toLocaleString("id-ID")} active
+                  residents
+                </span>
               </div>
             </div>
           </div>

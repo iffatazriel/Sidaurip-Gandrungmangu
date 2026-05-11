@@ -1,8 +1,6 @@
 import Header from '@/components/Dashboard/Header'
-import HeaderSection from '@/components/Dashboard/KelolaBerita/HeaderSection'
-import TableControl from '@/components/Dashboard/KelolaBerita/TableControl'
+import NewsManager from '@/components/Dashboard/KelolaBerita/NewsManager'
 import Sidebar from '@/components/Dashboard/Sidebar'
-import React from 'react'
 
 function KelolaBerita() {
   return (
@@ -16,8 +14,7 @@ function KelolaBerita() {
 
         <main className="flex-1 p-6 bg-gray-50">
           {/* isi dashboard */}
-          <HeaderSection />
-          <TableControl />          
+          <NewsManager />
         </main>
       </div>
     </div>

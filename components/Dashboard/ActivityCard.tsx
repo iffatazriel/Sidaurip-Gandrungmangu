@@ -1,119 +1,120 @@
-import React from 'react'
+import Link from "next/link";
+import type { DashboardTrend } from "./types";
 
-export default function ActivityCard() {
+type ActivityCardProps = {
+  trends: DashboardTrend[];
+};
+
+const quickActions = [
+  {
+    title: "Post News",
+    description: "Broadcast to all residents",
+    href: "/dashboard/kelolaberita",
+    icon: "post_add",
+    iconClass: "bg-primary-container text-on-primary",
+  },
+  {
+    title: "Update Budget",
+    description: "Quarterly financial report",
+    href: "/dashboard/transparansi",
+    icon: "account_balance_wallet",
+    iconClass: "bg-tertiary-container text-on-tertiary",
+  },
+  {
+    title: "Manage Residents",
+    description: "Registry data and CSV import",
+    href: "/dashboard/kelolapenduduk",
+    icon: "manage_accounts",
+    iconClass: "bg-secondary-container text-on-secondary-container",
+  },
+];
+
+export default function ActivityCard({ trends }: ActivityCardProps) {
+  const maxValue = Math.max(...trends.map((trend) => trend.value), 1);
+
   return (
     <div>
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                    {/* Chart Section  */}
-                    <div className="lg:col-span-8 bg-surface-container-low p-8 rounded-3xl min-h-[400px] flex flex-col">
-                        <div className="flex justify-between items-start mb-12">
-                            <div>
-                                <h4 className="text-2xl font-bold text-primary mb-1">Citizen Interaction Trends</h4>
-                                <p className="text-slate-500 text-sm">Digital service adoption over the last 6 months</p>
-                            </div>
-                            <span className="material-symbols-outlined text-slate-400">more_vert</span>
-                        </div>
-                        <div className="flex-1 flex items-end gap-3 min-h-[200px]">
-                            <div
-                                className="flex-1 bg-primary/20 rounded-t-lg relative group h-[40%] transition-all hover:bg-primary-container">
-                                <div
-                                    className="absolute -top-10 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-primary text-white text-[10px] px-2 py-1 rounded">
-                                    2.4k</div>
-                            </div>
-                            <div
-                                className="flex-1 bg-primary/20 rounded-t-lg relative group h-[65%] transition-all hover:bg-primary-container">
-                                <div
-                                    className="absolute -top-10 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-primary text-white text-[10px] px-2 py-1 rounded">
-                                    3.1k</div>
-                            </div>
-                            <div
-                                className="flex-1 bg-primary/20 rounded-t-lg relative group h-[55%] transition-all hover:bg-primary-container">
-                                <div
-                                    className="absolute -top-10 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-primary text-white text-[10px] px-2 py-1 rounded">
-                                    2.9k</div>
-                            </div>
-                            <div
-                                className="flex-1 bg-primary/20 rounded-t-lg relative group h-[85%] transition-all hover:bg-primary-container">
-                                <div
-                                    className="absolute -top-10 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-primary text-white text-[10px] px-2 py-1 rounded">
-                                    4.2k</div>
-                            </div>
-                            <div className="flex-1 bg-primary-container rounded-t-lg relative group h-[95%] transition-all">
-                                <div
-                                    className="absolute -top-10 left-1/2 -translate-x-1/2 opacity-100 bg-primary text-white text-[10px] px-2 py-1 rounded">
-                                    4.8k</div>
-                            </div>
-                            <div
-                                className="flex-1 bg-primary/20 rounded-t-lg relative group h-[75%] transition-all hover:bg-primary-container">
-                                <div
-                                    className="absolute -top-10 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-primary text-white text-[10px] px-2 py-1 rounded">
-                                    3.6k</div>
-                            </div>
-                        </div>
-                        <div
-                            className="flex justify-between mt-4 px-1 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                            <span>Jan</span>
-                            <span>Feb</span>
-                            <span>Mar</span>
-                            <span>Apr</span>
-                            <span>May</span>
-                            <span>Jun</span>
-                        </div>
-                    </div>
-                    {/* Quick Actions  */}
-                    <div className="lg:col-span-4 space-y-6">
-                        <h4 className="text-xl font-bold text-primary px-2">Quick Command Center</h4>
-                        <div className="grid grid-cols-1 gap-4">
-                            <button
-                                className="bg-surface-container-lowest p-6 rounded-2xl flex items-center justify-between group hover:shadow-xl hover:shadow-blue-900/5 transition-all active:scale-95 text-left">
-                                <div className="flex items-center gap-4">
-                                    <div
-                                        className="w-12 h-12 rounded-xl bg-primary-container text-on-primary flex items-center justify-center">
-                                        <span className="material-symbols-outlined" data-icon="post_add">post_add</span>
-                                    </div>
-                                    <div>
-                                        <p className="font-bold text-primary">Post News</p>
-                                        <p className="text-xs text-slate-500">Broadcast to all residents</p>
-                                    </div>
-                                </div>
-                                <span
-                                    className="material-symbols-outlined text-slate-300 group-hover:translate-x-1 transition-transform">chevron_right</span>
-                            </button>
-                            <button
-                                className="bg-surface-container-lowest p-6 rounded-2xl flex items-center justify-between group hover:shadow-xl hover:shadow-blue-900/5 transition-all active:scale-95 text-left">
-                                <div className="flex items-center gap-4">
-                                    <div
-                                        className="w-12 h-12 rounded-xl bg-tertiary-container text-on-tertiary flex items-center justify-center">
-                                        <span className="material-symbols-outlined"
-                                            data-icon="account_balance_wallet">account_balance_wallet</span>
-                                    </div>
-                                    <div>
-                                        <p className="font-bold text-primary">Update Budget</p>
-                                        <p className="text-xs text-slate-500">Quarterly financial report</p>
-                                    </div>
-                                </div>
-                                <span
-                                    className="material-symbols-outlined text-slate-300 group-hover:translate-x-1 transition-transform">chevron_right</span>
-                            </button>
-                            <button
-                                className="bg-surface-container-lowest p-6 rounded-2xl flex items-center justify-between group hover:shadow-xl hover:shadow-blue-900/5 transition-all active:scale-95 text-left">
-                                <div className="flex items-center gap-4">
-                                    <div
-                                        className="w-12 h-12 rounded-xl bg-secondary-container text-on-secondary-container flex items-center justify-center">
-                                        <span className="material-symbols-outlined"
-                                            data-icon="manage_accounts">manage_accounts</span>
-                                    </div>
-                                    <div>
-                                        <p className="font-bold text-primary">Manage Staff</p>
-                                        <p className="text-xs text-slate-500">Access control &amp; schedules</p>
-                                    </div>
-                                </div>
-                                <span
-                                    className="material-symbols-outlined text-slate-300 group-hover:translate-x-1 transition-transform">chevron_right</span>
-                            </button>
-                        </div>
-                    </div>
-                </section>
+      <section className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
+        <div className="flex min-h-[400px] flex-col rounded-3xl bg-surface-container-low p-8 lg:col-span-8">
+          <div className="mb-12 flex items-start justify-between">
+            <div>
+              <h4 className="mb-1 text-2xl font-bold text-primary">
+                Database Activity Trends
+              </h4>
+              <p className="text-sm text-slate-500">
+                Resident and news records over the last 6 months
+              </p>
+            </div>
+            <span className="material-symbols-outlined text-slate-400">
+              more_vert
+            </span>
+          </div>
+          <div className="flex min-h-[200px] flex-1 items-end gap-3">
+            {trends.map((trend, index) => (
+              <div
+                key={trend.label}
+                className={
+                  index === trends.length - 1
+                    ? "group relative flex-1 rounded-t-lg bg-primary-container transition-all"
+                    : "group relative flex-1 rounded-t-lg bg-primary/20 transition-all hover:bg-primary-container"
+                }
+                style={{
+                  height: `${Math.max((trend.value / maxValue) * 100, 8)}%`,
+                }}
+              >
+                <div
+                  className={
+                    index === trends.length - 1
+                      ? "absolute -top-10 left-1/2 -translate-x-1/2 rounded bg-primary px-2 py-1 text-[10px] text-white opacity-100"
+                      : "absolute -top-10 left-1/2 -translate-x-1/2 rounded bg-primary px-2 py-1 text-[10px] text-white opacity-0 transition-opacity group-hover:opacity-100"
+                  }
+                >
+                  {trend.value}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-4 flex justify-between px-1 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+            {trends.map((trend) => (
+              <span key={trend.label}>{trend.label}</span>
+            ))}
+          </div>
+        </div>
+
+        <div className="space-y-6 lg:col-span-4">
+          <h4 className="px-2 text-xl font-bold text-primary">
+            Quick Command Center
+          </h4>
+          <div className="grid grid-cols-1 gap-4">
+            {quickActions.map((action) => (
+              <Link
+                key={action.href}
+                href={action.href}
+                className="group flex items-center justify-between rounded-2xl bg-surface-container-lowest p-6 text-left transition-all hover:shadow-xl hover:shadow-blue-900/5 active:scale-95"
+              >
+                <div className="flex items-center gap-4">
+                  <div
+                    className={`flex h-12 w-12 items-center justify-center rounded-xl ${action.iconClass}`}
+                  >
+                    <span className="material-symbols-outlined">
+                      {action.icon}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="font-bold text-primary">{action.title}</p>
+                    <p className="text-xs text-slate-500">
+                      {action.description}
+                    </p>
+                  </div>
+                </div>
+                <span className="material-symbols-outlined text-slate-300 transition-transform group-hover:translate-x-1">
+                  chevron_right
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
     </div>
-  )
+  );
 }
