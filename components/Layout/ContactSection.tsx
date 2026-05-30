@@ -1,4 +1,4 @@
-import Image from "next/image";
+import SidauripMap from "@/components/Kontak/SidauripMap";
 
 const contacts = [
   {
@@ -46,38 +46,7 @@ export default function ContactSection() {
             </ul>
           </div>
 
-          <div className="relative h-[450px] overflow-hidden rounded-3xl bg-slate-300 shadow-2xl">
-            <Image
-              alt="Peta minimalis wilayah desa dengan penanda lokasi"
-              className="h-full w-full object-cover opacity-60 grayscale"
-              fill
-              sizes="(min-width: 768px) 50vw, 100vw"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbtpbTqpuSw1Vvve5VxSVOjImDIeBCApfLuHOWXkoDwIyT1ISqfzTQxElEQWLHvguSsKOUTmd1q46mI5RGLylVLkdULZzp7J_ZgnrQMkCdeLRaTPq4lVMCJJNbV9sdHTL4fYFmgWcuprzNhDEDjcIferW6jvf3JjlTcceIzfo1VK-w4MVg6cXptrqu1tofrwXcxQYfZOA1oor_QNaY7hCHG92Kuax0tCZIeEsYzGV5xWelLW02Fo3gphVT-YYr7pK9SAKsWHMqJg"
-            />
-            <div className="absolute inset-0 flex items-center justify-center p-6">
-              <a
-                className="flex items-center gap-3 rounded-2xl bg-primary-container px-6 py-4 text-white shadow-xl transition-transform hover:scale-[1.02]"
-                href="https://maps.google.com"
-                rel="noreferrer"
-                target="_blank"
-              >
-                <span
-                  className="material-symbols-outlined text-3xl"
-                  style={{ fontVariationSettings: "'FILL' 1" }}
-                >
-                  pin_drop
-                </span>
-                <span>
-                  <span className="block text-sm font-bold">
-                    Balaidesa Sidaurip
-                  </span>
-                  <span className="block text-[10px] opacity-70">
-                    Klik untuk navigasi GPS
-                  </span>
-                </span>
-              </a>
-            </div>
-          </div>
+          <SidauripMap className="h-[450px] rounded-3xl shadow-2xl" />
         </div>
       </div>
     </section>

@@ -1,6 +1,5 @@
 import Header from "@/components/Dashboard/Header";
-import ManagementSection from "@/components/Dashboard/KelolaTransparansi/ManagementSection";
-import MainContent from "@/components/Dashboard/KelolaTransparansi/MainContent";
+import TransparencyManager from "@/components/Dashboard/KelolaTransparansi/TransparencyManager";
 import Sidebar from "@/components/Dashboard/Sidebar";
 
 
@@ -15,9 +14,7 @@ const DashboardPage = () => {
         <Header />
 
         <main className="flex-1 p-6 bg-gray-50">
-          {/* isi dashboard */}
-          <MainContent />
-          <ManagementSection />
+          <TransparencyManager />
         </main>
       </div>
     </div>

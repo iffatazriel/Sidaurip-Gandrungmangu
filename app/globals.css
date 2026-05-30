@@ -126,6 +126,124 @@ h3,
   display: none;
 }
 
+.stats-dashboard-heading,
+.stats-dashboard-card {
+  animation: stats-dashboard-rise 700ms ease-out both;
+}
+
+.stats-dashboard-card {
+  transform-origin: center bottom;
+}
+
+.stats-dashboard-ring {
+  animation: stats-dashboard-ring 1200ms ease-out 250ms both;
+}
+
+.stats-dashboard-icon {
+  animation: stats-dashboard-float 4200ms ease-in-out infinite;
+}
+
+.stats-dashboard-segment,
+.stats-dashboard-bar {
+  animation: stats-dashboard-grow 900ms ease-out both;
+  transform-origin: left center;
+}
+
+.transparency-data-row {
+  animation: transparency-data-rise 520ms ease-out both;
+}
+
+.transparency-data-bar {
+  animation: transparency-data-grow 900ms ease-out both;
+  transform-origin: left center;
+}
+
+.transparency-data-column {
+  animation: transparency-data-column 850ms ease-out both;
+  transform-origin: bottom center;
+}
+
+@keyframes stats-dashboard-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes stats-dashboard-ring {
+  from {
+    stroke-dashoffset: 364.4;
+  }
+}
+
+@keyframes stats-dashboard-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(-6px, -8px, 0) rotate(-3deg);
+  }
+}
+
+@keyframes stats-dashboard-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes transparency-data-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes transparency-data-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes transparency-data-column {
+  from {
+    opacity: 0.45;
+    transform: scaleY(0.08);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stats-dashboard-heading,
+  .stats-dashboard-card,
+  .stats-dashboard-ring,
+  .stats-dashboard-icon,
+  .stats-dashboard-segment,
+  .stats-dashboard-bar,
+  .transparency-data-row,
+  .transparency-data-bar,
+  .transparency-data-column {
+    animation: none;
+  }
+}
+
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);

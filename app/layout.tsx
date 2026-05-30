@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans, Public_Sans, Geist } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
@@ -18,15 +18,55 @@ const publicSans = Public_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Desa Sidaurip | Portal Resmi Desa",
+  metadataBase: new URL("https://sidaurip.desa.id"),
+  title: {
+    default: "Desa Sidaurip | Portal Resmi Desa",
+    template: "%s | Desa Sidaurip",
+  },
   description:
     "Pusat informasi digital dan layanan terpadu satu pintu untuk seluruh warga Desa Sidaurip. Mandiri, Transparan, Profesional.",
+  keywords: [
+    "Desa Sidaurip",
+    "Cilacap",
+    "portal desa",
+    "layanan desa",
+    "informasi desa",
+  ],
+  authors: [{ name: "Pemerintah Desa Sidaurip" }],
   icons: {
-    icon: "/Logo-Cilacap.png",
-    apple: "/Logo-Cilacap.png",
-      
+    icon: [
+      { url: "/Logo-Cilacap.png", sizes: "32x32", type: "image/png" },
+      { url: "/Logo-Cilacap.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: [{ url: "/Logo-Cilacap.png", sizes: "180x180", type: "image/png" }],
   },
+  openGraph: {
+    type: "website",
+    locale: "id_ID",
+    siteName: "Desa Sidaurip",
+    title: "Desa Sidaurip | Portal Resmi Desa",
+    description:
+      "Pusat informasi digital dan layanan terpadu satu pintu untuk seluruh warga Desa Sidaurip.",
+    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Desa Sidaurip | Portal Resmi Desa",
+    description:
+      "Pusat informasi digital dan layanan terpadu satu pintu untuk seluruh warga Desa Sidaurip.",
+    images: ["/og-image.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f8fafb" },
+    { media: "(prefers-color-scheme: dark)", color: "#191c1d" },
+  ],
 };
 
 export default function RootLayout({
@@ -49,3 +89,4 @@ export default function RootLayout({
     </html>
   );
 }
+  

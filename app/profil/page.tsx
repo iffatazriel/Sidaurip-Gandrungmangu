@@ -5,7 +5,13 @@ import ProfilHero from "@/components/Profil/Hero";
 import History from "@/components/Profil/History";
 import StrukturOrganisasi from "@/components/Profil/StrukturOrganisasi";
 import VIsiMisi from "@/components/Profil/VIsiMisi";
+import type { Metadata } from "next";
 import React from "react";
+
+export const metadata: Metadata = {
+  title: "Profil Desa Sidaurip",
+  description: "Profil, sejarah, visi misi, dan struktur Pemerintah Desa Sidaurip.",
+};
 
 const ProfilPage = () => {
   return (

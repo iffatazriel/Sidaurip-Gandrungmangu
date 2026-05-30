@@ -98,6 +98,45 @@ model NewsPost {
   @@map("news_posts")
 }
 
+model VillageAgenda {
+  id          Int       @id @default(autoincrement())
+  title       String
+  category    String
+  description String?
+  location    String
+  startAt     DateTime  @map("start_at")
+  endAt       DateTime? @map("end_at")
+  status      String    @default("DRAFT")
+  featured    Boolean   @default(true)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([title])
+  @@index([category])
+  @@index([status])
+  @@index([startAt])
+  @@map("village_agendas")
+}
+
+model TransparencyRecord {
+  id       Int    @id @default(autoincrement())
+  activity String
+  category String
+  budget   BigInt @default(0)
+  realized BigInt @default(0)
+  note     String?
+  status   String @default("DRAFT")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([activity])
+  @@index([category])
+  @@index([status])
+  @@map("transparency_records")
+}
+
 model ServiceRequest {
   id             Int       @id @default(autoincrement())
   trackingNumber String    @unique @map("tracking_number")

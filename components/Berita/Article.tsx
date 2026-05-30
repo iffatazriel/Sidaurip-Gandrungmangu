@@ -1,5 +1,8 @@
+import Link from "next/link";
+
 export type PublicNewsPost = {
   id: number;
+  slug: string;
   title: string;
   author: string;
   category: string;
@@ -77,7 +80,10 @@ export default function Article({ posts }: ArticleProps) {
 
   return (
     <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-4 py-12 sm:px-6 md:grid-cols-12 md:py-1 lg:px-8">
-      <article className="group cursor-pointer md:col-span-8">
+      <Link
+        href={`/berita/${featuredPost.slug}`}
+        className="group md:col-span-8"
+      >
         <div className="flex h-full flex-col overflow-hidden rounded-xl bg-surface-container-lowest">
           <div className="aspect-video w-full overflow-hidden">
             <ImagePanel
@@ -108,16 +114,17 @@ export default function Article({ posts }: ArticleProps) {
             </div>
           </div>
         </div>
-      </article>
+      </Link>
 
       <div className="order-first flex flex-col gap-8 md:order-none md:col-span-4">
         {sidePosts.map((post, index) => (
-          <article
+          <Link
             key={post.id}
+            href={`/berita/${post.slug}`}
             className={
               index === 1
-                ? "group cursor-pointer rounded-xl border-l-4 border-tertiary-container bg-surface-container-lowest p-6 transition-all hover:bg-surface-bright"
-                : "group cursor-pointer rounded-xl bg-surface-container-lowest p-6 transition-all hover:bg-surface-bright"
+                ? "group rounded-xl border-l-4 border-tertiary-container bg-surface-container-lowest p-6 transition-all hover:bg-surface-bright"
+                : "group rounded-xl bg-surface-container-lowest p-6 transition-all hover:bg-surface-bright"
             }
           >
             <div className="mb-3 flex items-center gap-2">
@@ -134,7 +141,7 @@ export default function Article({ posts }: ArticleProps) {
             <p className="line-clamp-2 text-sm text-on-surface-variant">
               {getExcerpt(post)}
             </p>
-          </article>
+          </Link>
         ))}
 
         <div className="relative overflow-hidden rounded-xl bg-primary-container p-8 text-white">
@@ -164,8 +171,9 @@ export default function Article({ posts }: ArticleProps) {
       </div>
 
       {gridPosts.map((post) => (
-        <article
+        <Link
           key={post.id}
+          href={`/berita/${post.slug}`}
           className="group cursor-pointer overflow-hidden rounded-xl bg-surface-container-lowest md:col-span-4"
         >
           <div className="h-48 overflow-hidden">
@@ -196,7 +204,7 @@ export default function Article({ posts }: ArticleProps) {
               </span>
             </div>
           </div>
-        </article>
+        </Link>
       ))}
     </div>
   );

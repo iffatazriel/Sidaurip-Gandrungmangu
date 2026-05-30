@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { getHomepageAgendas, type PublicAgenda } from "@/lib/agenda";
 
 const newsItems = [
   {
@@ -18,7 +19,7 @@ const newsItems = [
   },
 ];
 
-const events = [
+const fallbackEvents = [
   {
     month: "Mei",
     day: "14",
@@ -45,7 +46,63 @@ const events = [
   },
 ];
 
-export default function NewsEvents() {
+function formatAgendaDate(value: string) {
+  const date = new Date(value);
+
+  return {
+    month: new Intl.DateTimeFormat("id-ID", { month: "short" }).format(date),
+    day: new Intl.DateTimeFormat("id-ID", { day: "2-digit" }).format(date),
+  };
+}
+
+function formatAgendaTime(agenda: PublicAgenda) {
+  const start = new Date(agenda.startAt);
+  const timeFormatter = new Intl.DateTimeFormat("id-ID", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  if (!agenda.endAt) {
+    return `${timeFormatter.format(start)} - Selesai`;
+  }
+
+  return `${timeFormatter.format(start)} - ${timeFormatter.format(
+    new Date(agenda.endAt)
+  )}`;
+}
+
+async function getEvents() {
+  try {
+    const agendas = await getHomepageAgendas(3);
+
+    if (agendas.length === 0) {
+      return fallbackEvents;
+    }
+
+    return agendas.map((agenda, index) => {
+      const date = formatAgendaDate(agenda.startAt);
+
+      return {
+        month: date.month,
+        day: date.day,
+        title: agenda.title,
+        time: formatAgendaTime(agenda),
+        place: agenda.location,
+        tone:
+          index % 2 === 0
+            ? "text-secondary bg-secondary-container"
+            : "text-tertiary bg-tertiary-fixed-dim/20",
+      };
+    });
+  } catch (error) {
+    console.error("HOMEPAGE_AGENDA_ERROR", error);
+    return fallbackEvents;
+  }
+}
+
+export default async function NewsEvents() {
+  const events = await getEvents();
+
   return (
     <section className="bg-surface py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">

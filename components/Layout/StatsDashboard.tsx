@@ -2,7 +2,7 @@ export default function StatsDashboard() {
   return (
     <section className="bg-surface-container-low py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="mb-16 text-center">
+        <div className="stats-dashboard-heading mb-16 text-center">
           <h2 className="mb-4 font-headline text-4xl font-extrabold text-primary">
             Transparansi Data Desa
           </h2>
@@ -12,7 +12,7 @@ export default function StatsDashboard() {
         </div>
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-          <article className="flex flex-col items-center justify-center rounded-2xl bg-surface-container-lowest p-10 text-center">
+          <article className="stats-dashboard-card flex flex-col items-center justify-center rounded-2xl bg-surface-container-lowest p-10 text-center">
             <div className="relative mb-6 flex h-32 w-32 items-center justify-center">
               <svg className="h-full w-full -rotate-90" viewBox="0 0 128 128">
                 <circle
@@ -25,7 +25,7 @@ export default function StatsDashboard() {
                   strokeWidth="8"
                 />
                 <circle
-                  className="text-primary"
+                  className="stats-dashboard-ring text-primary"
                   cx="64"
                   cy="64"
                   fill="transparent"
@@ -51,8 +51,8 @@ export default function StatsDashboard() {
             </p>
           </article>
 
-          <article className="relative overflow-hidden rounded-2xl bg-primary-container p-10 text-on-primary">
-            <span className="material-symbols-outlined absolute -bottom-4 -right-4 text-9xl text-white/10">
+          <article className="stats-dashboard-card relative overflow-hidden rounded-2xl bg-primary-container p-10 text-on-primary [animation-delay:140ms]">
+            <span className="material-symbols-outlined stats-dashboard-icon absolute -bottom-4 -right-4 text-9xl text-white/10">
               family_history
             </span>
             <p className="mb-6 text-sm font-bold uppercase tracking-widest opacity-70">
@@ -60,16 +60,16 @@ export default function StatsDashboard() {
             </p>
             <p className="mb-4 font-headline text-6xl font-black">3.120</p>
             <div className="mb-8 flex gap-2">
-              <div className="h-1 w-12 rounded-full bg-white" />
-              <div className="h-1 w-8 rounded-full bg-white/30" />
-              <div className="h-1 w-4 rounded-full bg-white/10" />
+              <div className="stats-dashboard-segment h-1 w-12 rounded-full bg-white" />
+              <div className="stats-dashboard-segment h-1 w-8 rounded-full bg-white/30 [animation-delay:220ms]" />
+              <div className="stats-dashboard-segment h-1 w-4 rounded-full bg-white/10 [animation-delay:360ms]" />
             </div>
             <p className="text-sm leading-relaxed">
               Mencakup 12 Dusun dan 45 Rukun Tetangga (RT).
             </p>
           </article>
 
-          <article className="flex flex-col justify-between rounded-2xl bg-surface-container-lowest p-10">
+          <article className="stats-dashboard-card flex flex-col justify-between rounded-2xl bg-surface-container-lowest p-10 [animation-delay:280ms]">
             <div>
               <p className="mb-4 text-sm font-bold uppercase tracking-widest text-on-surface-variant">
                 Luas Wilayah
@@ -91,7 +91,7 @@ export default function StatsDashboard() {
                 <span className="text-sm font-bold text-primary">65%</span>
               </div>
               <div className="h-2 w-full overflow-hidden rounded-full bg-surface-container-high">
-                <div className="h-full w-[65%] bg-secondary" />
+                <div className="stats-dashboard-bar h-full w-[65%] bg-secondary" />
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-on-surface-variant">
@@ -100,7 +100,7 @@ export default function StatsDashboard() {
                 <span className="text-sm font-bold text-primary">35%</span>
               </div>
               <div className="h-2 w-full overflow-hidden rounded-full bg-surface-container-high">
-                <div className="h-full w-[35%] bg-tertiary-container" />
+                <div className="stats-dashboard-bar h-full w-[35%] bg-tertiary-container [animation-delay:240ms]" />
               </div>
             </div>
           </article>

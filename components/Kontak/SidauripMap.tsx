@@ -3,6 +3,7 @@
 import { useEffect, useMemo } from "react";
 
 import { Map, MapControls, MapMarker, useMap } from "@/components/ui/map";
+import { cn } from "@/lib/utils";
 
 const SIDAURIP_CENTER: [number, number] = [108.8342, -7.5612];
 const BALAI_DESA_SIDAURIP: [number, number] = [108.8362, -7.5508];
@@ -227,9 +228,18 @@ function SidauripBoundary() {
   return null;
 }
 
-export default function SidauripMap() {
+type SidauripMapProps = {
+  className?: string;
+};
+
+export default function SidauripMap({ className }: SidauripMapProps) {
   return (
-    <div className="relative h-[460px] overflow-hidden rounded-2xl bg-surface-container-low editorial-shadow">
+    <div
+      className={cn(
+        "relative h-[460px] overflow-hidden rounded-2xl bg-surface-container-low editorial-shadow",
+        className,
+      )}
+    >
       <Map
         center={SIDAURIP_CENTER}
         zoom={12.6}

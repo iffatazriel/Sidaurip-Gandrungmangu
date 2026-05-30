@@ -6,7 +6,15 @@ import Allocation from "@/components/Transparansi/Allocation";
 import CallToAction from "@/components/Transparansi/CallToAction";
 import Summary from "@/components/Transparansi/Summary";
 import TransparencyTable from "@/components/Transparansi/TransparencyTable";
+import type { Metadata } from "next";
 import React from "react";
+
+export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Transparansi Anggaran",
+  description: "Informasi transparansi anggaran dan realisasi kegiatan Desa Sidaurip.",
+};
 
 const TransparansiPage = () => {
   return (

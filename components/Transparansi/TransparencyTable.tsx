@@ -1,6 +1,16 @@
-import React from 'react'
+import {
+  calculateTransparencySummary,
+  getPublishedTransparencyRecords,
+} from "@/lib/transparency";
 
-export default function TransparencyTable() {
+function formatRupiah(value: number) {
+  return value.toLocaleString("id-ID");
+}
+
+export default async function TransparencyTable() {
+  const records = await getPublishedTransparencyRecords();
+  const summary = calculateTransparencySummary(records);
+
   return (
     <section className="py-24 px-8 bg-surface-container-low">
             <div className="max-w-7xl mx-auto">
@@ -21,59 +31,35 @@ export default function TransparencyTable() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-surface-container-high">
-                            <tr className="hover:bg-surface-container transition-colors">
-                                <td className="px-8 py-6 text-sm font-bold text-primary">Penyelenggaraan Pemerintahan</td>
-                                <td className="px-8 py-6 text-sm font-medium">1.250.000.000</td>
-                                <td className="px-8 py-6 text-sm font-medium">920.000.000</td>
-                                <td className="px-8 py-6 text-sm">
-                                    <span className="text-secondary font-bold">73.6%</span>
-                                </td>
-                                <td className="px-8 py-6 text-xs text-on-surface-variant italic">Gaji &amp; Ops Kantor</td>
-                            </tr>
-                            <tr className="hover:bg-surface-container transition-colors">
-                                <td className="px-8 py-6 text-sm font-bold text-primary">Pembangunan Desa</td>
-                                <td className="px-8 py-6 text-sm font-medium">2.100.000.000</td>
-                                <td className="px-8 py-6 text-sm font-medium">1.450.000.000</td>
-                                <td className="px-8 py-6 text-sm">
-                                    <span className="text-secondary font-bold">69.0%</span>
-                                </td>
-                                <td className="px-8 py-6 text-xs text-on-surface-variant italic">Fisik &amp; Infrastruktur
-                                </td>
-                            </tr>
-                            <tr className="hover:bg-surface-container transition-colors">
-                                <td className="px-8 py-6 text-sm font-bold text-primary">Pembinaan Kemasyarakatan</td>
-                                <td className="px-8 py-6 text-sm font-medium">680.000.000</td>
-                                <td className="px-8 py-6 text-sm font-medium">410.000.000</td>
-                                <td className="px-8 py-6 text-sm">
-                                    <span className="text-secondary font-bold">60.3%</span>
-                                </td>
-                                <td className="px-8 py-6 text-xs text-on-surface-variant italic">Pelatihan UMKM</td>
-                            </tr>
-                            <tr className="hover:bg-surface-container transition-colors">
-                                <td className="px-8 py-6 text-sm font-bold text-primary">Pemberdayaan Masyarakat</td>
-                                <td className="px-8 py-6 text-sm font-medium">450.000.000</td>
-                                <td className="px-8 py-6 text-sm font-medium">280.000.000</td>
-                                <td className="px-8 py-6 text-sm">
-                                    <span className="text-secondary font-bold">62.2%</span>
-                                </td>
-                                <td className="px-8 py-6 text-xs text-on-surface-variant italic">Ketahanan Pangan</td>
-                            </tr>
-                            <tr className="hover:bg-surface-container transition-colors">
-                                <td className="px-8 py-6 text-sm font-bold text-primary">Penanggulangan Bencana</td>
-                                <td className="px-8 py-6 text-sm font-medium">340.000.000</td>
-                                <td className="px-8 py-6 text-sm font-medium">90.000.000</td>
-                                <td className="px-8 py-6 text-sm">
-                                    <span className="text-tertiary font-bold">26.5%</span>
-                                </td>
-                                <td className="px-8 py-6 text-xs text-on-surface-variant italic">Dana Darurat</td>
-                            </tr>
+                            {records.map((record, index) => {
+                                const rate = record.budget === 0 ? 0 : Math.round((record.realized / record.budget) * 1000) / 10;
+
+                                return (
+                                    <tr className="transparency-data-row hover:bg-surface-container transition-colors" key={record.id} style={{ animationDelay: `${index * 70}ms` }}>
+                                        <td className="px-8 py-6 text-sm font-bold text-primary">{record.activity}</td>
+                                        <td className="px-8 py-6 text-sm font-medium">{formatRupiah(record.budget)}</td>
+                                        <td className="px-8 py-6 text-sm font-medium">
+                                            <div className="space-y-2">
+                                                <span>{formatRupiah(record.realized)}</span>
+                                                <div className="h-1.5 w-32 overflow-hidden rounded-full bg-surface-container-high">
+                                                    <div className="transparency-data-bar h-full bg-secondary" style={{ width: `${Math.min(rate, 100)}%` }} />
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="px-8 py-6 text-sm">
+                                            <span className={rate >= 50 ? "text-secondary font-bold" : "text-tertiary font-bold"}>{rate}%</span>
+                                        </td>
+                                        <td className="px-8 py-6 text-xs text-on-surface-variant italic">{record.note}</td>
+                                    </tr>
+                                );
+                            })}
                         </tbody>
                         <tfoot>
                             <tr className="bg-surface-container-highest">
                                 <td className="px-8 py-6 text-sm font-extrabold text-primary">TOTAL</td>
-                                <td className="px-8 py-6 text-sm font-extrabold text-primary">4.820.000.000</td>
-                                <td className="px-8 py-6 text-sm font-extrabold text-primary">3.150.000.000</td>
-                                <td className="px-8 py-6 text-sm font-extrabold text-secondary">65.3%</td>
+                                <td className="px-8 py-6 text-sm font-extrabold text-primary">{formatRupiah(summary.totalBudget)}</td>
+                                <td className="px-8 py-6 text-sm font-extrabold text-primary">{formatRupiah(summary.totalRealized)}</td>
+                                <td className="px-8 py-6 text-sm font-extrabold text-secondary">{summary.realizationRate}%</td>
                                 <td className="px-8 py-6 text-xs font-bold text-primary uppercase">Murni</td>
                             </tr>
                         </tfoot>

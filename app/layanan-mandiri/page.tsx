@@ -7,6 +7,12 @@ import FloatingWhatsApp from "@/components/Layout/FloatingWhatsApp"
 import Header from "@/components/Layout/Header"
 import SiteFooter from "@/components/Layout/SiteFooter"
 import { getCurrentUser } from "@/lib/auth/session"
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Layanan Mandiri",
+  description: "Portal layanan mandiri untuk pengajuan administrasi warga Desa Sidaurip.",
+}
 
 const LayananPage = async () => {
   const user = await getCurrentUser()

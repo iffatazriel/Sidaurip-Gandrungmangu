@@ -7,6 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 const navItems = [
   { label: "Dashboard", href: "/dashboard", icon: "grid_view" },
   { label: "News Feed", href: "/dashboard/kelolaberita", icon: "newspaper" },
+  { label: "Agenda Desa", href: "/dashboard/agenda", icon: "event" },
   {
     label: "Public Services",
     href: "/dashboard/layananpublic",

@@ -2,6 +2,15 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth/session";
 import RegisterForm from "./RegisterForm";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Daftar",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default async function RegisterPage() {
   const user = await getCurrentUser();

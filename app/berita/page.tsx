@@ -4,11 +4,18 @@ import FloatingWhatsApp from "@/components/Layout/FloatingWhatsApp";
 import Header from "@/components/Layout/Header";
 import SiteFooter from "@/components/Layout/SiteFooter";
 import { prisma } from "@/lib/prisma";
+import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 
+export const metadata: Metadata = {
+  title: "Berita Desa Sidaurip",
+  description: "Kabar terbaru, agenda, dan informasi resmi dari Desa Sidaurip.",
+};
+
 type PublicNewsRow = {
   id: number;
+  slug: string;
   title: string;
   author: string;
   category: string;
@@ -22,7 +29,7 @@ type PublicNewsRow = {
 async function getPublishedPosts(): Promise<PublicNewsPost[]> {
   try {
     const posts = await prisma.$queryRaw<PublicNewsRow[]>`
-      SELECT id, title, author, category, excerpt, content, image_url, published_at, created_at
+      SELECT id, slug, title, author, category, excerpt, content, image_url, published_at, created_at
       FROM news_posts
       WHERE status = 'PUBLISHED'
       ORDER BY COALESCE(published_at, created_at) DESC
@@ -31,6 +38,7 @@ async function getPublishedPosts(): Promise<PublicNewsPost[]> {
 
     return posts.map((post) => ({
       id: post.id,
+      slug: post.slug,
       title: post.title,
       author: post.author,
       category: post.category,

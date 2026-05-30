@@ -1,6 +1,15 @@
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth/session";
 import LoginForm from "./LoginForm";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Masuk",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default async function LoginPage() {
   const user = await getCurrentUser();
