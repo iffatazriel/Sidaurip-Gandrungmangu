@@ -50,11 +50,9 @@ export async function fetchDashboardData(): Promise<{
           },
         },
       }),
-      prisma.newsPost.groupBy({
-        by: ["status"],
-        _count: { _all: true },
-        orderBy: { status: "asc" },
-      }),
+      prisma.$queryRaw<
+        { status: string; count: bigint }[]
+      >`SELECT status, COUNT(*)::bigint AS count FROM news_posts GROUP BY status`,
       prisma.$queryRaw<{ month_key: string; count: bigint }[]>`
         SELECT month_key, SUM(count)::bigint AS count
         FROM (
@@ -96,8 +94,12 @@ export async function fetchDashboardData(): Promise<{
       }),
     ]);
 
-    const publishedNews = newsCounts.find((row) => row.status === "PUBLISHED")?._count?._all ?? 0;
-    const draftNews = newsCounts.find((row) => row.status === "DRAFT")?._count?._all ?? 0;
+    const publishedNews = Number(
+      newsCounts.find((row) => row.status === "PUBLISHED")?.count ?? 0
+    );
+    const draftNews = Number(
+      newsCounts.find((row) => row.status === "DRAFT")?.count ?? 0
+    );
 
     const trends = monthLabels.map((month) => ({
       label: month.label,
