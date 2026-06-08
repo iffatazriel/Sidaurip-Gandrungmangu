@@ -1,14 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { hashPassword } from "@/lib/auth/password";
-import { createSession, ensureAuthTables } from "@/lib/auth/session";
+import { createSession } from "@/lib/auth/session";
 import { registerFormSchema } from "@/lib/validations";
 import { ZodError } from "zod";
 
 export async function POST(request: NextRequest) {
   try {
-    await ensureAuthTables();
-
     const body = registerFormSchema.parse(await request.json());
     const nik = body.nik;
     const name = body.name;

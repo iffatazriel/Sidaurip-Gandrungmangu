@@ -23,39 +23,7 @@ export function hashSessionToken(token: string) {
   return createHash("sha256").update(token).digest("hex");
 }
 
-export async function ensureAuthTables() {
-  await prisma.$executeRaw`
-    CREATE TABLE IF NOT EXISTS users (
-      id SERIAL PRIMARY KEY,
-      nik TEXT NOT NULL UNIQUE,
-      name TEXT NOT NULL,
-      phone TEXT,
-      password_hash TEXT NOT NULL,
-      role TEXT NOT NULL DEFAULT 'CITIZEN',
-      status TEXT NOT NULL DEFAULT 'PENDING',
-      resident_id INTEGER UNIQUE REFERENCES residents(id) ON DELETE SET NULL,
-      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-    )
-  `;
-  await prisma.$executeRaw`CREATE INDEX IF NOT EXISTS users_role_idx ON users (role)`;
-  await prisma.$executeRaw`CREATE INDEX IF NOT EXISTS users_status_idx ON users (status)`;
-
-  await prisma.$executeRaw`
-    CREATE TABLE IF NOT EXISTS user_sessions (
-      id SERIAL PRIMARY KEY,
-      token_hash TEXT NOT NULL UNIQUE,
-      user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-      expires_at TIMESTAMPTZ NOT NULL,
-      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-    )
-  `;
-  await prisma.$executeRaw`CREATE INDEX IF NOT EXISTS user_sessions_user_id_idx ON user_sessions (user_id)`;
-  await prisma.$executeRaw`CREATE INDEX IF NOT EXISTS user_sessions_expires_at_idx ON user_sessions (expires_at)`;
-}
-
 export async function createSession(userId: number) {
-  await ensureAuthTables();
 
   const token = randomBytes(32).toString("base64url");
   const expiresAt = new Date(Date.now() + sessionMaxAge * 1000);
@@ -76,7 +44,6 @@ export async function createSession(userId: number) {
 }
 
 export async function destroySession() {
-  await ensureAuthTables();
 
   const cookieStore = await cookies();
   const token = cookieStore.get(sessionCookieName)?.value;
@@ -89,7 +56,6 @@ export async function destroySession() {
 }
 
 export async function getCurrentUser(): Promise<AuthUser | null> {
-  await ensureAuthTables();
 
   const token = (await cookies()).get(sessionCookieName)?.value;
   if (!token) {

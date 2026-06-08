@@ -49,25 +49,6 @@ function timeAgo(value: Date) {
   return `${diffDays} days ago`;
 }
 
-async function ensureNewsTable() {
-  await prisma.$executeRaw`
-    CREATE TABLE IF NOT EXISTS news_posts (
-      id SERIAL PRIMARY KEY,
-      title TEXT NOT NULL,
-      slug TEXT NOT NULL UNIQUE,
-      author TEXT NOT NULL,
-      category TEXT NOT NULL,
-      excerpt TEXT,
-      content TEXT NOT NULL,
-      image_url TEXT,
-      status TEXT NOT NULL DEFAULT 'DRAFT',
-      published_at TIMESTAMPTZ,
-      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-    )
-  `;
-}
-
 async function getDashboardData(): Promise<{
   summary: DashboardSummary;
   trends: DashboardTrend[];
@@ -80,7 +61,6 @@ async function getDashboardData(): Promise<{
   }));
 
   try {
-    await ensureNewsTable();
 
     const [
       totalResidents,

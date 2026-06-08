@@ -1,5 +1,4 @@
 import AccountManager from "@/components/Dashboard/AkunWarga/AccountManager";
-import { ensureAuthTables } from "@/lib/auth/session";
 import { prisma } from "@/lib/prisma";
 
 type UserRow = {
@@ -13,8 +12,6 @@ type UserRow = {
 };
 
 async function getAccounts() {
-  await ensureAuthTables();
-
   const users = await prisma.$queryRaw<UserRow[]>`
     SELECT id, nik, name, phone, role, status, created_at
     FROM users

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyPassword } from "@/lib/auth/password";
-import { createSession, ensureAuthTables } from "@/lib/auth/session";
+import { createSession } from "@/lib/auth/session";
 import { prisma } from "@/lib/prisma";
 import { checkRateLimit, resetRateLimit } from "@/lib/rate-limit";
 import { loginFormSchema } from "@/lib/validations";
@@ -8,8 +8,6 @@ import { ZodError } from "zod";
 
 export async function POST(request: NextRequest) {
   try {
-    await ensureAuthTables();
-
     const body = loginFormSchema.parse(await request.json());
     const nik = body.nik;
     const password = body.password;

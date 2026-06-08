@@ -8,7 +8,7 @@ const config: Config.InitialOptions = {
   testEnvironment: 'jsdom',
   testMatch: ['**/__tests__/**/*.[jt]s?(x)', 'src/__tests__/**/*.[jt]s?(x)'],
   setupFilesAfterEnv: [
-    // Add setup logic if needed
+    '<rootDir>/node_modules/@testing-library/jest-dom',
   ],
   globals: {
     __EPRESS: true,

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getCurrentUser, ensureAuthTables } from "@/lib/auth/session";
+import { getCurrentUser } from "@/lib/auth/session";
 import { prisma } from "@/lib/prisma";
 
 type UserRow = {
@@ -39,7 +39,6 @@ async function requireAdminRequest() {
 
 export async function GET() {
   try {
-    await ensureAuthTables();
     const unauthorized = await requireAdminRequest();
     if (unauthorized) return unauthorized;
 
@@ -58,7 +57,6 @@ export async function GET() {
 
 export async function PATCH(request: NextRequest) {
   try {
-    await ensureAuthTables();
     const unauthorized = await requireAdminRequest();
     if (unauthorized) return unauthorized;
 
