@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans, Public_Sans, Geist } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import Providers from "./Providers";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -85,7 +86,9 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
         />
       </head>
-      <body className="min-h-full bg-background text-on-surface">{children}</body>
+      <body className="min-h-full bg-background text-on-surface">
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }
