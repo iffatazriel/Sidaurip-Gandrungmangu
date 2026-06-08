@@ -7,6 +7,8 @@ import type {
   DashboardTrend,
 } from "@/components/Dashboard/types";
 
+export type { DashboardActivity, DashboardSummary, DashboardTrend };
+
 function getMonthLabels() {
   const formatter = new Intl.DateTimeFormat("id-ID", { month: "short" });
   const now = new Date();
