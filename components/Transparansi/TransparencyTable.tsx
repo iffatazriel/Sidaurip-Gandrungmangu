@@ -2,6 +2,7 @@ import {
   calculateTransparencySummary,
   getPublishedTransparencyRecords,
 } from "@/lib/transparency";
+import { sanitizePlain } from "@/lib/sanitize";
 
 function formatRupiah(value: number) {
   return value.toLocaleString("id-ID");
@@ -49,7 +50,7 @@ export default async function TransparencyTable() {
                                         <td className="px-8 py-6 text-sm">
                                             <span className={rate >= 50 ? "text-secondary font-bold" : "text-tertiary font-bold"}>{rate}%</span>
                                         </td>
-                                        <td className="px-8 py-6 text-xs text-on-surface-variant italic">{record.note}</td>
+                                        <td className="px-8 py-6 text-xs text-on-surface-variant italic">{sanitizePlain(record.note || "")}</td>
                                     </tr>
                                 );
                             })}

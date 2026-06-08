@@ -8,7 +8,7 @@ import SiteFooter from "@/components/Layout/SiteFooter";
 import StatsDashboard from "@/components/Layout/StatsDashboard";
 import type { Metadata } from "next";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 120;
 
 export const metadata: Metadata = {
   title: {

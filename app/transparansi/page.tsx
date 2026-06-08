@@ -9,7 +9,7 @@ import TransparencyTable from "@/components/Transparansi/TransparencyTable";
 import type { Metadata } from "next";
 import React from "react";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Transparansi Anggaran",

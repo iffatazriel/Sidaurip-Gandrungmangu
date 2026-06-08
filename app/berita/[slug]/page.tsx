@@ -2,6 +2,7 @@ import FloatingWhatsApp from "@/components/Layout/FloatingWhatsApp";
 import Header from "@/components/Layout/Header";
 import SiteFooter from "@/components/Layout/SiteFooter";
 import { prisma } from "@/lib/prisma";
+import { sanitizeHtml, sanitizePlain } from "@/lib/sanitize";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -161,9 +162,9 @@ export default async function BeritaDetailPage({ params }: BeritaDetailPageProps
             className="aspect-video w-full rounded-lg object-cover"
           />
 
-          <div className="mt-10 whitespace-pre-line text-lg leading-8 text-on-surface">
-            {post.content}
-          </div>
+           <div className="mt-10 whitespace-pre-line text-lg leading-8 text-on-surface">
+             {sanitizeHtml(post.content)}
+           </div>
         </article>
       </main>
       <SiteFooter />

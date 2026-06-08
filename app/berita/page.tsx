@@ -6,7 +6,7 @@ import SiteFooter from "@/components/Layout/SiteFooter";
 import { prisma } from "@/lib/prisma";
 import type { Metadata } from "next";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Berita Desa Sidaurip",
