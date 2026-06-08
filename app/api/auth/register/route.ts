@@ -13,42 +13,42 @@ export async function POST(request: NextRequest) {
     const phone = body.phone || null;
     const password = body.password;
 
-    const existing = await prisma.$queryRaw<{ id: number }[]>`
-      SELECT id FROM users WHERE nik = ${nik} LIMIT 1
-    `;
+    const existing = await prisma.user.findUnique({
+      where: { nik },
+      select: { id: true },
+    });
 
-    if (existing.length) {
+    if (existing) {
       return NextResponse.json({ message: "NIK sudah terdaftar" }, { status: 409 });
     }
 
-    const [residentRows, userCountRows] = await prisma.$transaction([
-      prisma.$queryRaw<{ id: number; nama: string }[]>`
-        SELECT id, nama FROM residents WHERE nik = ${nik} LIMIT 1
-      `,
-      prisma.$queryRaw<{ count: bigint }[]>`SELECT COUNT(*)::bigint AS count FROM users`,
+    const [resident, userCount] = await prisma.$transaction([
+      prisma.resident.findUnique({
+        where: { nik },
+        select: { id: true, nama: true },
+      }),
+      prisma.user.count(),
     ]);
 
-    const resident = residentRows[0];
-    const isFirstUser = Number(userCountRows[0]?.count ?? 0) === 0;
+    const isFirstUser = userCount === 0;
     const role = isFirstUser ? "ADMIN" : "CITIZEN";
     const status = isFirstUser || resident ? "VERIFIED" : "PENDING";
     const passwordHash = await hashPassword(password);
 
-    const users = await prisma.$queryRaw<{ id: number; role: string; status: string }[]>`
-      INSERT INTO users (nik, name, phone, password_hash, role, status, resident_id)
-      VALUES (
-        ${nik},
-        ${resident?.nama ?? name},
-        ${phone},
-        ${passwordHash},
-        ${role},
-        ${status},
-        ${resident?.id ?? null}
-      )
-      RETURNING id, role, status
-    `;
+    const user = await prisma.user.create({
+      data: {
+        nik,
+        name: resident?.nama ?? name,
+        phone,
+        passwordHash,
+        role,
+        status,
+        residentId: resident?.id ?? null,
+      },
+      select: { id: true, role: true, status: true },
+    });
 
-    await createSession(users[0].id);
+    await createSession(user.id);
 
     return NextResponse.json(
       {
@@ -56,8 +56,8 @@ export async function POST(request: NextRequest) {
           status === "VERIFIED"
             ? "Registrasi berhasil"
             : "Registrasi berhasil. Akun menunggu verifikasi admin.",
-        role: users[0].role,
-        status: users[0].status,
+        role: user.role,
+        status: user.status,
       },
       { status: 201 }
     );

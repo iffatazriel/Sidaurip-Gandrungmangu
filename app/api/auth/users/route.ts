@@ -9,7 +9,7 @@ type UserRow = {
   phone: string | null;
   role: string;
   status: string;
-  created_at: Date;
+  createdAt: Date;
 };
 
 function serializeUser(user: UserRow) {
@@ -20,7 +20,7 @@ function serializeUser(user: UserRow) {
     phone: user.phone,
     role: user.role,
     status: user.status,
-    createdAt: user.created_at.toISOString(),
+    createdAt: user.createdAt.toISOString(),
   };
 }
 
@@ -42,11 +42,20 @@ export async function GET() {
     const unauthorized = await requireAdminRequest();
     if (unauthorized) return unauthorized;
 
-    const users = await prisma.$queryRaw<UserRow[]>`
-      SELECT id, nik, name, phone, role, status, created_at
-      FROM users
-      ORDER BY created_at DESC
-    `;
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        nik: true,
+        name: true,
+        phone: true,
+        role: true,
+        status: true,
+        createdAt: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
 
     return NextResponse.json({ data: users.map(serializeUser) });
   } catch (error) {
@@ -69,18 +78,25 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ message: "ID akun wajib diisi" }, { status: 400 });
     }
 
-    const rows = await prisma.$queryRaw<UserRow[]>`
-      UPDATE users
-      SET status = ${status}, role = ${role}, updated_at = NOW()
-      WHERE id = ${id}
-      RETURNING id, nik, name, phone, role, status, created_at
-    `;
+     const user = await prisma.user.update({
+      where: { id },
+      data: { status, role },
+      select: {
+        id: true,
+        nik: true,
+        name: true,
+        phone: true,
+        role: true,
+        status: true,
+        createdAt: true,
+      },
+    }).catch(() => null);
 
-    if (!rows.length) {
+    if (!user) {
       return NextResponse.json({ message: "Akun tidak ditemukan" }, { status: 404 });
     }
 
-    return NextResponse.json(serializeUser(rows[0]));
+    return NextResponse.json(serializeUser(user));
   } catch (error) {
     console.error("PATCH_AUTH_USER_ERROR", error);
     return NextResponse.json({ message: "Gagal memperbarui akun" }, { status: 500 });

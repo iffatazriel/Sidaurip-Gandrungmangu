@@ -24,17 +24,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const users = await prisma.$queryRaw<
-      { id: number; nik: string; name: string; password_hash: string; role: string; status: string }[]
-    >`
-      SELECT id, nik, name, password_hash, role, status
-      FROM users
-      WHERE nik = ${nik}
-      LIMIT 1
-    `;
-    const user = users[0];
+    const user = await prisma.user.findUnique({
+      where: { nik },
+      select: {
+        id: true,
+        nik: true,
+        name: true,
+        passwordHash: true,
+        role: true,
+        status: true,
+      },
+    });
 
-    if (!user || !(await verifyPassword(password, user.password_hash))) {
+    if (!user || !(await verifyPassword(password, user.passwordHash))) {
       return NextResponse.json({ message: "NIK atau password salah" }, { status: 401 });
     }
 
