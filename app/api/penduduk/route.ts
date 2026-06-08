@@ -3,6 +3,7 @@ import { Prisma } from '@/lib/generated/prisma/client';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '@/lib/auth/session';
 import { logAudit } from '@/lib/audit';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 type ResidentImportInput = {
   nama?: string;
@@ -73,6 +74,17 @@ function toResidentCreateInput(
 
 export async function GET(request: NextRequest) {
   try {
+    const ip = request.headers.get('x-forwarded-for') ?? request.headers.get('x-real-ip') ?? 'unknown';
+    const rateCheck = checkRateLimit(`api:penduduk:${ip}`);
+
+    if (!rateCheck.allowed) {
+      const waitMinutes = Math.ceil((rateCheck.resetAt - Date.now()) / 60000);
+      return NextResponse.json(
+        { message: `Terlalu banyak permintaan. Coba lagi dalam ${waitMinutes} menit` },
+        { status: 429 }
+      );
+    }
+
     const { searchParams } = new URL(request.url);
     const page = Math.max(1, parsePageParam(searchParams.get('page'), 1));
     const perPage = Math.min(

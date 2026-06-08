@@ -150,6 +150,29 @@ export default function ServicePortal({ user }: { user: ServicePortalUser }) {
     setUploadingId(requestId);
     setMessage(null);
 
+    const fileInput = event.currentTarget.querySelector('input[name="file"]') as HTMLInputElement;
+    const file = fileInput?.files?.[0];
+
+    if (!file) {
+      setMessage("Pilih file terlebih dahulu");
+      setUploadingId(null);
+      return;
+    }
+
+    const MAX_SIZE = 5 * 1024 * 1024;
+    if (file.size > MAX_SIZE) {
+      setMessage(`File terlalu besar (max 5MB, file: ${(file.size / 1024 / 1024).toFixed(2)}MB)`);
+      setUploadingId(null);
+      return;
+    }
+
+    const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png', 'image/jpg'];
+    if (!allowedTypes.includes(file.type)) {
+      setMessage("File harus berupa PDF, JPEG, atau PNG");
+      setUploadingId(null);
+      return;
+    }
+
     const uploadForm = new FormData(event.currentTarget);
     uploadForm.set("serviceRequestId", String(requestId));
 
