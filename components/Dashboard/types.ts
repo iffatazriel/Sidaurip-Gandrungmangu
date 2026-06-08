@@ -19,4 +19,5 @@ export type DashboardActivity = {
   status: string;
   tone: "success" | "warning" | "info" | "neutral";
   time: string;
+  createdAt: Date;
 };
