@@ -8,15 +8,24 @@ type UserRow = {
   phone: string | null;
   role: string;
   status: string;
-  created_at: Date;
+  createdAt: Date;
 };
 
 async function getAccounts() {
-  const users = await prisma.$queryRaw<UserRow[]>`
-    SELECT id, nik, name, phone, role, status, created_at
-    FROM users
-    ORDER BY created_at DESC
-  `;
+  const users = await prisma.user.findMany({
+    select: {
+      id: true,
+      nik: true,
+      name: true,
+      phone: true,
+      role: true,
+      status: true,
+      createdAt: true,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
 
   return users.map((user) => ({
     id: user.id,
@@ -25,7 +34,7 @@ async function getAccounts() {
     phone: user.phone,
     role: user.role,
     status: user.status,
-    createdAt: user.created_at.toISOString(),
+    createdAt: user.createdAt.toISOString(),
   }));
 }
 
