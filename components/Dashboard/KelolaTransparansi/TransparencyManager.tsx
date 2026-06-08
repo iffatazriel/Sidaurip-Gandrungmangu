@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
+import { Skeleton } from "@/components/ui/Skeleton";
 import type {
   TransparencyForm,
   TransparencyRecord,
@@ -273,6 +274,17 @@ export default function TransparencyManager() {
         </div>
       </section>
 
+      {isLoading ? (
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="rounded-2xl border border-outline-variant/10 bg-surface-container-lowest p-6 shadow-sm">
+              <Skeleton className="mb-2 h-4 w-24" />
+              <Skeleton className="h-8 w-32" />
+              <Skeleton className="mt-4 h-1.5 w-full rounded-full" />
+            </div>
+          ))}
+        </div>
+      ) : (
       <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
         <div className="group relative overflow-hidden rounded-2xl border border-outline-variant/10 bg-surface-container-lowest p-6 shadow-sm">
           <div className="absolute right-0 top-0 p-4 opacity-10 transition-opacity group-hover:opacity-20">
@@ -352,8 +364,9 @@ export default function TransparencyManager() {
             })}
           </div>
         </div>
-      </div>
-
+        </div>
+      )}
+ 
       {error ? (
         <div className="rounded-xl bg-error-container px-5 py-4 text-sm font-semibold text-on-error-container">
           {error}
@@ -595,11 +608,34 @@ export default function TransparencyManager() {
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {isLoading ? (
-                    <tr>
-                      <td colSpan={5} className="px-6 py-10 text-center text-sm font-semibold text-on-surface-variant">
-                        Memuat data transparansi...
-                      </td>
-                    </tr>
+                    <>
+                      {[...Array(5)].map((_, i) => (
+                        <tr key={i}>
+                          <td className="px-6 py-6">
+                            <Skeleton className="mb-1 h-4 w-40" />
+                            <Skeleton className="h-3 w-56" />
+                          </td>
+                          <td className="px-6 py-6">
+                            <Skeleton className="h-6 w-20 rounded-full" />
+                          </td>
+                          <td className="px-6 py-6">
+                            <Skeleton className="mb-1 h-4 w-24" />
+                            <Skeleton className="h-3 w-16" />
+                          </td>
+                          <td className="px-6 py-6">
+                            <Skeleton className="mb-1 h-4 w-16" />
+                            <Skeleton className="h-1.5 w-24 rounded-full" />
+                          </td>
+                          <td className="px-6 py-6">
+                            <div className="flex items-center justify-end gap-2">
+                              <Skeleton className="h-8 w-8 rounded-lg" />
+                              <Skeleton className="h-8 w-8 rounded-lg" />
+                              <Skeleton className="h-8 w-8 rounded-lg" />
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </>
                   ) : null}
                   {!isLoading && response.data.length === 0 ? (
                     <tr>

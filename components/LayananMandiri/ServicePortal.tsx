@@ -2,42 +2,9 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import DocPreview from "@/components/ui/DocPreview";
 
-const serviceTypes = [
-  "Surat Domisili",
-  "Surat Pengantar KTP",
-  "Surat Keterangan Usaha",
-  "SKTM",
-  "Kartu Keluarga",
-  "Aspirasi & Pengaduan",
-];
-
-type ServiceRequest = {
-  id: number;
-  trackingNumber: string;
-  serviceType: string;
-  applicantName: string;
-  nik: string;
-  phone: string | null;
-  address: string | null;
-  notes: string | null;
-  status: string;
-  adminNote: string | null;
-  documentNote: string | null;
-  rejectionReason: string | null;
-  documents: ServiceRequestDocument[];
-  createdAt: string;
-};
-
-type ServiceRequestDocument = {
-  id: number;
-  name: string;
-  fileUrl: string;
-  fileName: string;
-  status: string;
-  note: string | null;
-  uploadedAt: string;
-};
+import type { ServiceRequest, ServiceRequestDocument } from "@/components/Dashboard/LayananPublik/types";
 
 type ServicePortalUser = {
   nik: string;
@@ -47,10 +14,12 @@ type ServicePortalUser = {
   status: string;
 };
 
+const fallbackTypes = ["Surat Domisili", "Surat Pengantar KTP", "Surat Keterangan Usaha", "SKTM", "Kartu Keluarga", "Aspirasi & Pengaduan"];
+
 export default function ServicePortal({ user }: { user: ServicePortalUser }) {
   const router = useRouter();
   const [form, setForm] = useState({
-    serviceType: serviceTypes[0],
+    serviceType: fallbackTypes[0],
     applicantName: user.name,
     nik: user.nik,
     phone: user.phone ?? "",
@@ -65,24 +34,53 @@ export default function ServicePortal({ user }: { user: ServicePortalUser }) {
   const [message, setMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isTracking, setIsTracking] = useState(false);
+  const [myRequestsLoading, setMyRequestsLoading] = useState(false);
+  const [myRequestsPage, setMyRequestsPage] = useState(1);
+  const [myRequestsMeta, setMyRequestsMeta] = useState({ total: 0, totalPages: 1 });
+  const [uploadSuccess, setUploadSuccess] = useState<string | null>(null);
+  const [previewIndex, setPreviewIndex] = useState<number | null>(null);
+  const [previewDocs, setPreviewDocs] = useState<ServiceRequestDocument[]>([]);
+  const [serviceTypes, setServiceTypes] = useState<string[]>(fallbackTypes);
 
-  const loadMyRequests = async () => {
+  const loadMyRequests = async (page = myRequestsPage) => {
+    setMyRequestsLoading(true);
     try {
-      const response = await fetch("/api/layanan-mandiri?mine=1", { cache: "no-store" });
+      const response = await fetch(`/api/layanan-mandiri?mine=1&page=${page}&perPage=10`, { cache: "no-store" });
       const body = await response.json();
 
       if (response.ok) {
         setMyRequests(body.data ?? []);
+        setMyRequestsMeta(body.meta ?? { total: 0, totalPages: 1 });
+        setMyRequestsPage(page);
+      } else {
+        throw new Error(body.message ?? "Gagal memuat riwayat pengajuan");
       }
-    } catch {
-      setMessage("Gagal memuat riwayat pengajuan");
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Gagal memuat riwayat pengajuan");
+    } finally {
+      setMyRequestsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (!uploadSuccess) return;
+    const timer = setTimeout(() => setUploadSuccess(null), 3000);
+    return () => clearTimeout(timer);
+  }, [uploadSuccess]);
 
   useEffect(() => {
     // Load the citizen's request history after the interactive form hydrates.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     void loadMyRequests();
+    void (async () => {
+      try {
+        const res = await fetch("/api/service-types");
+        const body = await res.json();
+        if (res.ok && Array.isArray(body.data)) {
+          setServiceTypes(body.data.map((t: { name: string }) => t.name));
+        }
+      } catch { /* ignore */ }
+    })();
   }, []);
 
   const submitRequest = async (event: FormEvent<HTMLFormElement>) => {
@@ -102,7 +100,7 @@ export default function ServicePortal({ user }: { user: ServicePortalUser }) {
         throw new Error(body.message ?? "Gagal mengirim pengajuan");
       }
 
-      setResult(body as ServiceRequest);
+      setResult(body.data as ServiceRequest);
       await loadMyRequests();
       setForm({
         serviceType: serviceTypes[0],
@@ -133,7 +131,7 @@ export default function ServicePortal({ user }: { user: ServicePortalUser }) {
         throw new Error(body.message ?? "Nomor resi tidak ditemukan");
       }
 
-      setTrackedRequest(body as ServiceRequest);
+      setTrackedRequest(body.data as ServiceRequest);
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Nomor resi tidak ditemukan");
     } finally {
@@ -167,6 +165,7 @@ export default function ServicePortal({ user }: { user: ServicePortalUser }) {
       }
 
       event.currentTarget.reset();
+      setUploadSuccess("Dokumen berhasil diupload");
       await loadMyRequests();
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Gagal mengupload dokumen");
@@ -232,7 +231,7 @@ export default function ServicePortal({ user }: { user: ServicePortalUser }) {
             </label>
             <label>
               <span className="mb-2 block text-xs font-bold uppercase tracking-widest text-outline">Alamat</span>
-              <input value={form.address} onChange={(event) => setForm((current) => ({ ...current, address: event.target.value }))} className="w-full rounded-lg border-none bg-surface-container-low p-4" />
+              <textarea value={form.address} onChange={(event) => setForm((current) => ({ ...current, address: event.target.value }))} className="min-h-24 w-full rounded-lg border-none bg-surface-container-low p-4" />
             </label>
             <label className="md:col-span-2">
               <span className="mb-2 block text-xs font-bold uppercase tracking-widest text-outline">Catatan / Keperluan</span>
@@ -286,15 +285,24 @@ export default function ServicePortal({ user }: { user: ServicePortalUser }) {
             </div>
             <button
               className="rounded-lg bg-surface-container-low px-4 py-2 text-sm font-bold text-primary"
-              onClick={loadMyRequests}
+              onClick={() => loadMyRequests()}
               type="button"
             >
               Muat Ulang
             </button>
           </div>
 
+          {uploadSuccess ? (
+            <div className="mb-4 rounded-lg bg-tertiary-container p-3 text-sm font-semibold text-on-tertiary-container">
+              {uploadSuccess}
+            </div>
+          ) : null}
           <div className="grid gap-4">
-            {myRequests.length ? (
+            {myRequestsLoading ? (
+              <div className="flex items-center justify-center py-12">
+                <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary-container border-t-primary" />
+              </div>
+            ) : myRequests.length ? (
               myRequests.map((request) => (
                 <article key={request.id} className="rounded-lg border border-outline-variant/20 p-5">
                   <div className="flex flex-col justify-between gap-3 md:flex-row md:items-start">
@@ -327,7 +335,7 @@ export default function ServicePortal({ user }: { user: ServicePortalUser }) {
                     </div>
                   ) : null}
 
-                  {request.status === "NEED_DOCUMENTS" ? (
+                  {request.status === "NEED_DOCUMENTS" || request.documents.some((d) => d.status === "REJECTED") ? (
                     <form className="mt-4 grid gap-3 md:grid-cols-[1fr_1fr_auto]" onSubmit={(event) => uploadDocument(event, request.id)}>
                       <input
                         className="rounded-lg bg-surface-container-low p-3 text-sm"
@@ -353,17 +361,21 @@ export default function ServicePortal({ user }: { user: ServicePortalUser }) {
 
                   {request.documents.length ? (
                     <div className="mt-4 grid gap-2">
-                      {request.documents.map((document) => (
-                        <a
-                          className="flex flex-col justify-between gap-2 rounded-lg bg-surface-container-low px-4 py-3 text-sm md:flex-row md:items-center"
-                          href={document.fileUrl}
-                          key={document.id}
-                          rel="noreferrer"
-                          target="_blank"
-                        >
-                          <span className="font-bold text-primary">{document.name}</span>
-                          <span className="text-xs font-bold uppercase text-on-surface-variant">{document.status}</span>
-                        </a>
+                      {request.documents.map((document, dIdx) => (
+                        <div key={document.id}>
+                          <button
+                            onClick={() => { setPreviewDocs(request.documents); setPreviewIndex(dIdx); }}
+                            className="flex w-full flex-col justify-between gap-2 rounded-lg bg-surface-container-low px-4 py-3 text-sm transition-colors hover:bg-outline/10 md:flex-row md:items-center"
+                          >
+                            <span className="font-bold text-primary">{document.name}</span>
+                            <span className="text-xs font-bold uppercase text-on-surface-variant">{document.status}</span>
+                          </button>
+                          {document.status === "REJECTED" && document.note ? (
+                            <p className="mt-1 rounded-md bg-error-container px-3 py-2 text-xs font-semibold text-on-error-container">
+                              Alasan ditolak: {document.note}
+                            </p>
+                          ) : null}
+                        </div>
                       ))}
                     </div>
                   ) : null}
@@ -375,8 +387,51 @@ export default function ServicePortal({ user }: { user: ServicePortalUser }) {
               </p>
             )}
           </div>
+          {myRequestsMeta.totalPages > 1 ? (
+            <div className="mt-4 flex items-center justify-between border-t border-outline-variant/20 pt-4">
+              <p className="text-xs text-on-surface-variant">
+                {myRequestsMeta.total} data — Halaman {myRequestsPage} dari {myRequestsMeta.totalPages}
+              </p>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => loadMyRequests(myRequestsPage - 1)}
+                  disabled={myRequestsPage <= 1}
+                  className="rounded-lg border border-outline-variant/30 px-3 py-1.5 text-xs font-bold transition-all hover:bg-surface-container-low disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  Prev
+                </button>
+                {Array.from({ length: myRequestsMeta.totalPages }, (_, i) => i + 1).map((num) => (
+                  <button
+                    key={num}
+                    onClick={() => loadMyRequests(num)}
+                    className={`min-w-[32px] rounded-lg px-2 py-1.5 text-xs font-bold transition-all ${
+                      myRequestsPage === num
+                        ? "bg-primary-container text-on-primary"
+                        : "hover:bg-surface-container-low"
+                    }`}
+                  >
+                    {num}
+                  </button>
+                ))}
+                <button
+                  onClick={() => loadMyRequests(myRequestsPage + 1)}
+                  disabled={myRequestsPage >= myRequestsMeta.totalPages}
+                  className="rounded-lg border border-outline-variant/30 px-3 py-1.5 text-xs font-bold transition-all hover:bg-surface-container-low disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          ) : null}
         </div>
       </div>
+      {previewIndex !== null && (
+        <DocPreview
+          files={previewDocs.map((d) => ({ name: d.name, fileUrl: d.fileUrl, status: d.status }))}
+          initialIndex={previewIndex}
+          onClose={() => setPreviewIndex(null)}
+        />
+      )}
     </section>
   );
 }

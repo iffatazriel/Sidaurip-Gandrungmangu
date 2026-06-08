@@ -1,4 +1,5 @@
 import type { AgendaResponse, VillageAgenda } from "./types";
+import { Skeleton } from "@/components/ui/Skeleton";
 
 type TableControlProps = {
   agendas: VillageAgenda[];
@@ -150,11 +151,38 @@ export default function TableControl({
 
           <tbody className="divide-y divide-surface-container">
             {isLoading ? (
-              <tr>
-                <td colSpan={5} className="px-8 py-10 text-center text-sm font-semibold text-on-surface-variant">
-                  Memuat data agenda...
-                </td>
-              </tr>
+              <>
+                {[...Array(5)].map((_, i) => (
+                  <tr key={i}>
+                    <td className="px-8 py-6">
+                      <div className="flex items-center gap-3">
+                        <Skeleton className="h-8 w-8 rounded-lg" />
+                        <div>
+                          <Skeleton className="mb-1 h-4 w-40" />
+                          <Skeleton className="h-3 w-24" />
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-8 py-6">
+                      <Skeleton className="h-4 w-28" />
+                    </td>
+                    <td className="px-8 py-6">
+                      <Skeleton className="h-6 w-20 rounded-full" />
+                    </td>
+                    <td className="px-8 py-6">
+                      <Skeleton className="h-4 w-24" />
+                    </td>
+                    <td className="px-8 py-6">
+                      <div className="flex items-center justify-end gap-2">
+                        <Skeleton className="h-6 w-16 rounded-full" />
+                        <Skeleton className="h-8 w-8 rounded-lg" />
+                        <Skeleton className="h-8 w-8 rounded-lg" />
+                        <Skeleton className="h-8 w-8 rounded-lg" />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </>
             ) : null}
             {!isLoading && agendas.length === 0 ? (
               <tr>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo } from "react";
+import type { Map as MapLibreMap } from "maplibre-gl";
 
 import { Map, MapControls, MapMarker, useMap } from "@/components/ui/map";
 import { cn } from "@/lib/utils";
@@ -152,6 +153,38 @@ const SIDAURIP_BOUNDARY: [number, number][] = [
   [108.839313, -7.528834],
 ];
 
+function mapHasLayer(map: MapLibreMap, layerId: string) {
+  try {
+    return Boolean(map.getLayer(layerId));
+  } catch {
+    return false;
+  }
+}
+
+function mapHasSource(map: MapLibreMap, sourceId: string) {
+  try {
+    return Boolean(map.getSource(sourceId));
+  } catch {
+    return false;
+  }
+}
+
+function removeMapLayer(map: MapLibreMap, layerId: string) {
+  try {
+    if (map.getLayer(layerId)) map.removeLayer(layerId);
+  } catch {
+    return;
+  }
+}
+
+function removeMapSource(map: MapLibreMap, sourceId: string) {
+  try {
+    if (map.getSource(sourceId)) map.removeSource(sourceId);
+  } catch {
+    return;
+  }
+}
+
 function SidauripBoundary() {
   const { map, isLoaded } = useMap();
 
@@ -174,14 +207,14 @@ function SidauripBoundary() {
   useEffect(() => {
     if (!map || !isLoaded) return;
 
-    if (!map.getSource("sidaurip-boundary")) {
+    if (!mapHasSource(map, "sidaurip-boundary")) {
       map.addSource("sidaurip-boundary", {
         type: "geojson",
         data: boundaryData,
       });
     }
 
-    if (!map.getLayer("sidaurip-fill")) {
+    if (!mapHasLayer(map, "sidaurip-fill")) {
       map.addLayer({
         id: "sidaurip-fill",
         type: "fill",
@@ -193,7 +226,7 @@ function SidauripBoundary() {
       });
     }
 
-    if (!map.getLayer("sidaurip-outline")) {
+    if (!mapHasLayer(map, "sidaurip-outline")) {
       map.addLayer({
         id: "sidaurip-outline",
         type: "line",
@@ -219,9 +252,9 @@ function SidauripBoundary() {
     );
 
     return () => {
-      if (map.getLayer("sidaurip-outline")) map.removeLayer("sidaurip-outline");
-      if (map.getLayer("sidaurip-fill")) map.removeLayer("sidaurip-fill");
-      if (map.getSource("sidaurip-boundary")) map.removeSource("sidaurip-boundary");
+      removeMapLayer(map, "sidaurip-outline");
+      removeMapLayer(map, "sidaurip-fill");
+      removeMapSource(map, "sidaurip-boundary");
     };
   }, [boundaryData, isLoaded, map]);
 

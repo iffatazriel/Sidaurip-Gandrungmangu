@@ -4,10 +4,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
+import { useNotifications } from "@/hooks/useNotifications";
+import NotificationPanel from "@/components/Dashboard/NotificationPanel";
 
 export default function Header() {
   const router = useRouter();
   const [search, setSearch] = useState("");
+  const [showNotif, setShowNotif] = useState(false);
+  const { notifications, unreadCount, loading, markAsRead, markAllAsRead } =
+    useNotifications();
 
   const handleSearch = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -41,14 +46,30 @@ export default function Header() {
         </form>
       </div>
       <div className="flex items-center gap-4">
-        <Link
-          href="/dashboard/kelolaberita"
-          className="relative rounded-full p-2 text-slate-500 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50"
-          title="News records"
-        >
-          <span className="material-symbols-outlined">notifications</span>
-          <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-error" />
-        </Link>
+        <div className="relative">
+          <button
+            onClick={() => setShowNotif((prev) => !prev)}
+            className="relative rounded-full p-2 text-slate-500 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50"
+            title="Notifikasi"
+          >
+            <span className="material-symbols-outlined">notifications</span>
+            {unreadCount > 0 && (
+              <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-error px-1 text-[9px] font-bold text-white">
+                {unreadCount > 9 ? "9+" : unreadCount}
+              </span>
+            )}
+          </button>
+          {showNotif && (
+            <NotificationPanel
+              notifications={notifications}
+              unreadCount={unreadCount}
+              loading={loading}
+              onMarkAsRead={markAsRead}
+              onMarkAllAsRead={markAllAsRead}
+              onClose={() => setShowNotif(false)}
+            />
+          )}
+        </div>
         <Link
           href="/dashboard/kelolapenduduk"
           className="rounded-full p-2 text-slate-500 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50"

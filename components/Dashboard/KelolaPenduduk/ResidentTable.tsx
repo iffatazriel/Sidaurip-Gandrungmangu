@@ -1,10 +1,14 @@
 import type { Resident, ResidentsResponse } from "./types";
+import { Skeleton } from "@/components/ui/Skeleton";
 
 type ResidentTableProps = {
   residents: Resident[];
   meta: ResidentsResponse["meta"];
   isLoading: boolean;
   onPageChange: (page: number) => void;
+  onView: (resident: Resident) => void;
+  onEdit: (resident: Resident) => void;
+  onDelete: (resident: Resident) => void;
 };
 
 function getInitials(name: string) {
@@ -33,6 +37,9 @@ export default function ResidentTable({
   meta,
   isLoading,
   onPageChange,
+  onView,
+  onEdit,
+  onDelete,
 }: ResidentTableProps) {
   const firstShown = meta.total === 0 ? 0 : (meta.page - 1) * meta.perPage + 1;
   const lastShown = Math.min(meta.page * meta.perPage, meta.total);
@@ -62,14 +69,34 @@ export default function ResidentTable({
           </thead>
           <tbody className="divide-y divide-slate-100">
             {isLoading ? (
-              <tr>
-                <td
-                  className="px-8 py-10 text-center text-sm font-semibold text-on-surface-variant"
-                  colSpan={5}
-                >
-                  Memuat data penduduk...
-                </td>
-              </tr>
+              <>
+                {[...Array(5)].map((_, i) => (
+                  <tr key={i}>
+                    <td className="px-8 py-6">
+                      <Skeleton className="h-4 w-32" />
+                    </td>
+                    <td className="px-8 py-6">
+                      <div className="flex items-center gap-3">
+                        <Skeleton className="h-9 w-9 rounded-full" />
+                        <Skeleton className="h-4 w-40" />
+                      </div>
+                    </td>
+                    <td className="px-8 py-6">
+                      <Skeleton className="mb-2 h-4 w-32" />
+                      <Skeleton className="h-3 w-24" />
+                    </td>
+                    <td className="px-8 py-6 text-center">
+                      <Skeleton className="mx-auto h-6 w-20 rounded-full" />
+                    </td>
+                    <td className="px-8 py-6 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <Skeleton className="h-8 w-8 rounded-lg" />
+                        <Skeleton className="h-8 w-8 rounded-lg" />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </>
             ) : null}
             {!isLoading && residents.length === 0 ? (
               <tr>
@@ -122,6 +149,7 @@ export default function ResidentTable({
                   <div className="flex items-center justify-end gap-2">
                     <button
                       type="button"
+                      onClick={() => onView(resident)}
                       className="rounded-lg p-2 text-slate-400 transition-all hover:bg-blue-50 hover:text-blue-600"
                       title="View Details"
                     >
@@ -131,11 +159,22 @@ export default function ResidentTable({
                     </button>
                     <button
                       type="button"
+                      onClick={() => onEdit(resident)}
                       className="rounded-lg p-2 text-slate-400 transition-all hover:bg-blue-50 hover:text-blue-600"
                       title="Edit Data"
                     >
                       <span className="material-symbols-outlined text-xl">
                         edit
+                      </span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onDelete(resident)}
+                      className="rounded-lg p-2 text-slate-400 transition-all hover:bg-red-50 hover:text-error"
+                      title="Hapus Data"
+                    >
+                      <span className="material-symbols-outlined text-xl">
+                        delete
                       </span>
                     </button>
                   </div>

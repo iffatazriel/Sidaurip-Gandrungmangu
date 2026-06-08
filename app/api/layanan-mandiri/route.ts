@@ -1,6 +1,15 @@
+import crypto from "crypto";
+import { rm } from "fs/promises";
+import path from "path";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth/session";
+import { ensureNotificationsTable } from "@/lib/notifications";
+import { logAudit } from "@/lib/audit";
+import { serviceRequestSchema } from "@/lib/validations";
+import { text, optional, serviceStatus as status } from "@/lib/utils";
+import { apiSuccess, apiError, apiPaginated } from "@/lib/api-response";
+import { ZodError } from "zod";
 
 type ServiceRequestRow = {
   id: number;
@@ -49,21 +58,6 @@ type RequestInput = {
 
 let ensureServiceTablePromise: Promise<void> | null = null;
 
-function text(value: unknown) {
-  return typeof value === "string" ? value.trim() : "";
-}
-
-function optional(value: unknown) {
-  const normalized = text(value);
-  return normalized.length ? normalized : null;
-}
-
-function status(value: unknown) {
-  const normalized = text(value).toUpperCase();
-  const allowed = ["PENDING", "NEED_DOCUMENTS", "DOCUMENT_REVIEW", "PROCESSING", "APPROVED", "DONE", "REJECTED"];
-  return allowed.includes(normalized) ? normalized : "PENDING";
-}
-
 function trackingNumber() {
   const date = new Date();
   const ymd = [
@@ -71,7 +65,7 @@ function trackingNumber() {
     String(date.getMonth() + 1).padStart(2, "0"),
     String(date.getDate()).padStart(2, "0"),
   ].join("");
-  return `LYN-${ymd}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
+  return `LYN-${ymd}-${crypto.randomUUID().split("-")[0].toUpperCase()}`;
 }
 
 function serializeDocument(row: DocumentRow) {
@@ -154,6 +148,38 @@ async function ensureServiceTable() {
   `;
   await prisma.$executeRaw`CREATE INDEX IF NOT EXISTS service_request_documents_request_idx ON service_request_documents (service_request_id)`;
   await prisma.$executeRaw`CREATE INDEX IF NOT EXISTS service_request_documents_status_idx ON service_request_documents (status)`;
+  await prisma.$executeRaw`
+    CREATE TABLE IF NOT EXISTS service_types (
+      id SERIAL PRIMARY KEY,
+      name TEXT NOT NULL UNIQUE,
+      description TEXT DEFAULT '',
+      is_active BOOLEAN NOT NULL DEFAULT true,
+      sort_order INTEGER NOT NULL DEFAULT 0,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  const existingCount = await prisma.$queryRaw<{ count: bigint }[]>`SELECT COUNT(*)::bigint AS count FROM service_types`;
+  if (Number(existingCount[0]?.count ?? 0) === 0) {
+    const defaults = ["Surat Domisili", "Surat Pengantar KTP", "Surat Keterangan Usaha", "SKTM", "Kartu Keluarga", "Aspirasi & Pengaduan"];
+    for (let i = 0; i < defaults.length; i++) {
+      await prisma.$executeRaw`INSERT INTO service_types (name, sort_order) VALUES (${defaults[i]}, ${i}) ON CONFLICT (name) DO NOTHING`;
+    }
+  }
+  await prisma.$executeRaw`
+    CREATE TABLE IF NOT EXISTS knowledge_base (
+      id SERIAL PRIMARY KEY,
+      title TEXT NOT NULL,
+      content TEXT NOT NULL DEFAULT '',
+      category TEXT DEFAULT 'umum',
+      tags TEXT DEFAULT '',
+      is_published BOOLEAN NOT NULL DEFAULT true,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  await prisma.$executeRaw`CREATE INDEX IF NOT EXISTS knowledge_base_category_idx ON knowledge_base (category)`;
+  await prisma.$executeRaw`CREATE INDEX IF NOT EXISTS knowledge_base_published_idx ON knowledge_base (is_published)`;
 }
 
 export function ensureServiceRequestsReady() {
@@ -183,11 +209,11 @@ export async function GET(request: NextRequest) {
       `;
 
       if (rows.length === 0) {
-        return NextResponse.json({ message: "Nomor resi tidak ditemukan" }, { status: 404 });
+        return apiError("Nomor resi tidak ditemukan", 404);
       }
 
       if (!user || (user.role !== "ADMIN" && rows[0].nik !== user.nik)) {
-        return NextResponse.json({ message: "Anda tidak memiliki akses ke pengajuan ini" }, { status: 403 });
+        return apiError("Anda tidak memiliki akses ke pengajuan ini", 403);
       }
 
       const documents = await prisma.$queryRaw<DocumentRow[]>`
@@ -197,20 +223,29 @@ export async function GET(request: NextRequest) {
         ORDER BY uploaded_at DESC
       `;
 
-      return NextResponse.json(serialize(rows[0], documents));
+      return apiSuccess(serialize(rows[0], documents));
     }
 
     if (mine) {
       if (!user) {
-        return NextResponse.json({ message: "Silakan login terlebih dahulu" }, { status: 401 });
+        return apiError("Silakan login terlebih dahulu", 401);
       }
+
+      const minePerPage = Math.min(Math.max(Number(params.get("perPage") ?? 10), 1), 50);
+      const minePage = Math.max(Number(params.get("page") ?? 1), 1);
+
+      const totalRows = await prisma.$queryRaw<{ count: bigint }[]>`
+        SELECT COUNT(*)::bigint AS count FROM service_requests WHERE nik = ${user.nik}
+      `;
+      const total = Number(totalRows[0]?.count ?? 0);
+      const totalPages = Math.max(Math.ceil(total / minePerPage), 1);
 
       const rows = await prisma.$queryRaw<ServiceRequestRow[]>`
         SELECT id, tracking_number, service_type, applicant_name, nik, phone, address, notes, status, admin_note, document_note, rejection_reason, completed_at, created_at, updated_at
         FROM service_requests
         WHERE nik = ${user.nik}
         ORDER BY created_at DESC
-        LIMIT 20
+        LIMIT ${minePerPage} OFFSET ${(minePage - 1) * minePerPage}
       `;
       const requestIds = rows.map((row) => row.id);
       const documents = requestIds.length
@@ -223,13 +258,14 @@ export async function GET(request: NextRequest) {
           )
         : [];
 
-      return NextResponse.json({
-        data: rows.map((row) => serialize(row, documents.filter((document) => document.service_request_id === row.id))),
-      });
+      return apiPaginated(
+        rows.map((row) => serialize(row, documents.filter((document) => document.service_request_id === row.id))),
+        { page: minePage, perPage: minePerPage, total, totalPages },
+      );
     }
 
     if (!user || user.role !== "ADMIN") {
-      return NextResponse.json({ message: "Akses dashboard membutuhkan akun admin" }, { status: 403 });
+      return apiError("Akses dashboard membutuhkan akun admin", 403);
     }
 
     const clauses: string[] = [];
@@ -258,31 +294,30 @@ export async function GET(request: NextRequest) {
       ...values
     );
 
-    const [pending, needDocuments, documentReview, processing, approved, done] = await prisma.$transaction([
-      prisma.$queryRaw<{ count: bigint }[]>`SELECT COUNT(*)::bigint AS count FROM service_requests WHERE status = 'PENDING'`,
-      prisma.$queryRaw<{ count: bigint }[]>`SELECT COUNT(*)::bigint AS count FROM service_requests WHERE status = 'NEED_DOCUMENTS'`,
-      prisma.$queryRaw<{ count: bigint }[]>`SELECT COUNT(*)::bigint AS count FROM service_requests WHERE status = 'DOCUMENT_REVIEW'`,
-      prisma.$queryRaw<{ count: bigint }[]>`SELECT COUNT(*)::bigint AS count FROM service_requests WHERE status = 'PROCESSING'`,
-      prisma.$queryRaw<{ count: bigint }[]>`SELECT COUNT(*)::bigint AS count FROM service_requests WHERE status = 'APPROVED'`,
-      prisma.$queryRaw<{ count: bigint }[]>`SELECT COUNT(*)::bigint AS count FROM service_requests WHERE status = 'DONE'`,
-    ]);
+    const statsRows = await prisma.$queryRaw<{ status: string; count: bigint }[]>`
+      SELECT status, COUNT(*)::bigint AS count FROM service_requests GROUP BY status
+    `;
+    const statsMap: Record<string, number> = {};
+    for (const row of statsRows) {
+      statsMap[row.status] = Number(row.count);
+    }
 
     const total = Number(totalRows[0]?.count ?? 0);
-    return NextResponse.json({
-      data: rows.map((row) => serialize(row)),
-      meta: { page, perPage, total, totalPages: Math.max(Math.ceil(total / perPage), 1) },
-      stats: {
-        pending: Number(pending[0]?.count ?? 0),
-        needDocuments: Number(needDocuments[0]?.count ?? 0),
-        documentReview: Number(documentReview[0]?.count ?? 0),
-        processing: Number(processing[0]?.count ?? 0),
-        approved: Number(approved[0]?.count ?? 0),
-        done: Number(done[0]?.count ?? 0),
-      },
-    });
+    return apiPaginated(
+      rows.map((row) => serialize(row)),
+      { page, perPage, total, totalPages: Math.max(Math.ceil(total / perPage), 1) },
+      { stats: {
+        pending: statsMap["PENDING"] ?? 0,
+        needDocuments: statsMap["NEED_DOCUMENTS"] ?? 0,
+        documentReview: statsMap["DOCUMENT_REVIEW"] ?? 0,
+        processing: statsMap["PROCESSING"] ?? 0,
+        approved: statsMap["APPROVED"] ?? 0,
+        done: statsMap["DONE"] ?? 0,
+      } },
+    );
   } catch (error) {
     console.error("GET_SERVICE_REQUESTS_ERROR", error);
-    return NextResponse.json({ message: "Gagal mengambil data layanan" }, { status: 500 });
+    return apiError("Gagal mengambil data layanan", 500);
   }
 }
 
@@ -292,24 +327,17 @@ export async function POST(request: NextRequest) {
     const user = await getCurrentUser();
 
     if (!user) {
-      return NextResponse.json({ message: "Silakan login terlebih dahulu" }, { status: 401 });
+      return apiError("Silakan login terlebih dahulu", 401);
     }
 
     if (user.status !== "VERIFIED") {
-      return NextResponse.json(
-        { message: "Akun Anda masih menunggu verifikasi admin" },
-        { status: 403 }
-      );
+      return apiError("Akun Anda masih menunggu verifikasi admin", 403);
     }
 
-    const body = (await request.json()) as RequestInput;
-    const serviceType = text(body.serviceType);
+    const body = serviceRequestSchema.parse(await request.json());
+    const serviceType = body.serviceType;
     const applicantName = user.name;
     const nik = user.nik;
-
-    if (!serviceType || !applicantName || !nik) {
-      return NextResponse.json({ message: "Jenis layanan, nama, dan NIK wajib diisi" }, { status: 400 });
-    }
 
     const rows = await prisma.$queryRaw<ServiceRequestRow[]>`
       INSERT INTO service_requests (tracking_number, service_type, applicant_name, nik, phone, address, notes)
@@ -317,12 +345,39 @@ export async function POST(request: NextRequest) {
       RETURNING id, tracking_number, service_type, applicant_name, nik, phone, address, notes, status, admin_note, document_note, rejection_reason, completed_at, created_at, updated_at
     `;
 
-    return NextResponse.json(serialize(rows[0]), { status: 201 });
+    await ensureNotificationsTable();
+    await prisma.$executeRaw`
+      INSERT INTO notifications (user_id, title, message, type, link)
+      SELECT id, ${`Pengajuan baru: ${serviceType}`}, ${`${applicantName} mengajukan ${serviceType}`}, 'INFO', ${`/dashboard/layananpublic`}
+      FROM users WHERE role = 'ADMIN'
+    `;
+
+    const created = serialize(rows[0]);
+    await logAudit(
+      user.id, user.name, "CREATE", "service_request", created.id,
+      created.trackingNumber, null, { serviceType, notes: body.notes },
+    );
+
+    return apiSuccess(created, 201);
   } catch (error) {
+    if (error instanceof ZodError) {
+      const messages = error.issues.map((e) => e.message);
+      return apiError(messages.join(", "), 400);
+    }
     console.error("CREATE_SERVICE_REQUEST_ERROR", error);
-    return NextResponse.json({ message: "Gagal membuat pengajuan layanan" }, { status: 500 });
+    return apiError("Gagal membuat pengajuan layanan", 500);
   }
 }
+
+const allowedTransitions: Record<string, string[]> = {
+  PENDING: ["NEED_DOCUMENTS", "DOCUMENT_REVIEW", "REJECTED"],
+  NEED_DOCUMENTS: ["DOCUMENT_REVIEW", "REJECTED"],
+  DOCUMENT_REVIEW: ["PROCESSING", "REJECTED"],
+  PROCESSING: ["APPROVED", "REJECTED"],
+  APPROVED: ["DONE"],
+  DONE: [],
+  REJECTED: [],
+};
 
 export async function PATCH(request: NextRequest) {
   try {
@@ -330,37 +385,75 @@ export async function PATCH(request: NextRequest) {
     const user = await getCurrentUser();
 
     if (!user || user.role !== "ADMIN") {
-      return NextResponse.json({ message: "Akses dashboard membutuhkan akun admin" }, { status: 403 });
+      return apiError("Akses dashboard membutuhkan akun admin", 403);
     }
 
     const body = (await request.json()) as RequestInput & { id?: number };
     const id = Number(body.id);
 
     if (!id) {
-      return NextResponse.json({ message: "ID pengajuan wajib diisi" }, { status: 400 });
+      return apiError("ID pengajuan wajib diisi", 400);
+    }
+
+    const current = await prisma.$queryRaw<ServiceRequestRow[]>`
+      SELECT id, tracking_number, service_type, applicant_name, nik, phone, address, notes, status, admin_note, document_note, rejection_reason, completed_at, created_at, updated_at
+      FROM service_requests WHERE id = ${id}
+    `;
+
+    if (current.length === 0) {
+      return apiError("Pengajuan tidak ditemukan", 404);
+    }
+
+    const newStatus = status(body.status);
+    const currentStatus = current[0].status;
+    const allowed = allowedTransitions[currentStatus];
+
+    if (!allowed || !allowed.includes(newStatus)) {
+      return apiError(`Transisi status tidak valid dari ${currentStatus} ke ${newStatus}`, 400);
     }
 
     const rows = await prisma.$queryRaw<ServiceRequestRow[]>`
       UPDATE service_requests
       SET
-        status = ${status(body.status)},
+        status = ${newStatus},
         admin_note = ${optional(body.adminNote)},
         document_note = ${optional(body.documentNote)},
         rejection_reason = ${optional(body.rejectionReason)},
-        completed_at = CASE WHEN ${status(body.status)} = 'DONE' THEN COALESCE(completed_at, NOW()) ELSE completed_at END,
+        completed_at = CASE WHEN ${newStatus} = 'DONE' THEN COALESCE(completed_at, NOW()) ELSE completed_at END,
         updated_at = NOW()
       WHERE id = ${id}
       RETURNING id, tracking_number, service_type, applicant_name, nik, phone, address, notes, status, admin_note, document_note, rejection_reason, completed_at, created_at, updated_at
     `;
 
     if (rows.length === 0) {
-      return NextResponse.json({ message: "Pengajuan tidak ditemukan" }, { status: 404 });
+      return apiError("Pengajuan tidak ditemukan", 404);
     }
 
-    return NextResponse.json(serialize(rows[0]));
+    await ensureNotificationsTable();
+    const updated = serialize(rows[0]);
+    const statusLabel = updated.status.replace(/_/g, " ").toLowerCase();
+
+    await prisma.$executeRaw`
+      INSERT INTO notifications (user_id, title, message, type, link)
+      SELECT id, ${`Status pengajuan diperbarui`}, ${`Pengajuan ${updated.serviceType} atas nama ${updated.applicantName} berubah menjadi ${statusLabel}`}, 'INFO', ${`/dashboard/layananpublic`}
+      FROM users WHERE role = 'ADMIN'
+    `;
+
+    await prisma.$executeRaw`
+      INSERT INTO notifications (user_id, title, message, type, link)
+      SELECT id, ${`Status pengajuan diperbarui`}, ${`Pengajuan ${updated.serviceType} Anda berubah menjadi ${statusLabel}`}, 'INFO', ${`/layanan-mandiri`}
+      FROM users WHERE nik = ${updated.nik}
+    `;
+
+    await logAudit(
+      user.id, user.name, "UPDATE", "service_request", updated.id,
+      updated.trackingNumber, { status: currentStatus }, { status: newStatus, adminNote: body.adminNote },
+    );
+
+    return apiSuccess(updated);
   } catch (error) {
     console.error("UPDATE_SERVICE_REQUEST_ERROR", error);
-    return NextResponse.json({ message: "Gagal memperbarui pengajuan" }, { status: 500 });
+    return apiError("Gagal memperbarui pengajuan", 500);
   }
 }
 
@@ -370,19 +463,41 @@ export async function DELETE(request: NextRequest) {
     const user = await getCurrentUser();
 
     if (!user || user.role !== "ADMIN") {
-      return NextResponse.json({ message: "Akses dashboard membutuhkan akun admin" }, { status: 403 });
+      return apiError("Akses dashboard membutuhkan akun admin", 403);
     }
 
     const id = Number(request.nextUrl.searchParams.get("id"));
 
     if (!id) {
-      return NextResponse.json({ message: "ID pengajuan wajib diisi" }, { status: 400 });
+      return apiError("ID pengajuan wajib diisi", 400);
     }
 
+    const requestInfo = await prisma.$queryRaw<{ tracking_number: string; service_type: string }[]>`
+      SELECT tracking_number, service_type FROM service_requests WHERE id = ${id} LIMIT 1
+    `;
+
+    const docRows = await prisma.$queryRaw<{ file_url: string }[]>`
+      SELECT file_url FROM service_request_documents WHERE service_request_id = ${id}
+    `;
+    const uploadDir = path.join(process.cwd(), "public");
+
     await prisma.$executeRaw`DELETE FROM service_requests WHERE id = ${id}`;
-    return NextResponse.json({ deleted: true });
+
+    if (requestInfo.length) {
+      await logAudit(
+        user.id, user.name, "DELETE", "service_request", id,
+        requestInfo[0].tracking_number, { serviceType: requestInfo[0].service_type }, null,
+      );
+    }
+
+    for (const row of docRows) {
+      const filePath = path.join(uploadDir, row.file_url.replace(/^\//, ""));
+      await rm(filePath, { force: true });
+    }
+
+    return apiSuccess({ deleted: true });
   } catch (error) {
     console.error("DELETE_SERVICE_REQUEST_ERROR", error);
-    return NextResponse.json({ message: "Gagal menghapus pengajuan" }, { status: 500 });
+    return apiError("Gagal menghapus pengajuan", 500);
   }
 }

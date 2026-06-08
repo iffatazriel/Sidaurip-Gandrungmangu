@@ -3,11 +3,13 @@ import { useRef } from "react";
 type ManagementToolsProps = {
   onImportCsv: (file: File) => void;
   isImporting: boolean;
+  onAddResident: () => void;
 };
 
 export default function ManagementTools({
   onImportCsv,
   isImporting,
+  onAddResident,
 }: ManagementToolsProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -47,6 +49,7 @@ export default function ManagementTools({
         </button>
         <button
           type="button"
+          onClick={onAddResident}
           className="flex items-center gap-2 rounded-lg bg-primary-container px-6 py-3 font-bold text-white shadow-lg shadow-blue-900/20 transition-transform hover:scale-[0.98]"
         >
           <span className="material-symbols-outlined">person_add</span>

@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sidaurip GDM
 
-## Getting Started
+A Next.js 16 application for village financial transparency reporting.
 
-First, run the development server:
+## Architecture
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+┌────────────────────┐
+│   Next.js App      │
+│  (app router)      │
+└────────┬───────────┘
+         │
+┌────────▼───────────┐
+│  API Routes        │
+│  - /api/penduduk   │
+└────────┬───────────┘
+         │
+┌────────▼───────────┐
+│  Prisma ORM        │
+│  (PostgreSQL)      │
+└────────┬───────────┘
+         │
+┌────────▼───────────┐
+│  Supabase Auth     │
+└────────────────────┘
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Setup
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm install
+cp .env.example .env
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Available Scripts
 
-## Learn More
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm run start` | Start production server |
+| `npm run lint` | Run ESLint |
+| `npm run typecheck` | Run TypeScript type check |
+| `npm test` | Run Jest tests |
+| `npm run format` | Format code with Prettier |
 
-To learn more about Next.js, take a look at the following resources:
+## Features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Transparency Dashboard**: Real-time financial data visualization with Maplibre GL
+- **Resident Management**: CSV import with streaming + batch processing
+- **Pagination API**: `/api/penduduk` endpoint for resident data
+- **Authentication**: Supabase SSR integration
+- **Structured Logging**: Pino-based logging for debugging
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Environment Variables
 
-## Deploy on Vercel
+| Variable | Description |
+|----------|-------------|
+| `DATABASE_URL` | PostgreSQL connection string |
+| `SUPABASE_URL` | Supabase project URL |
+| `SUPABASE_ANON_KEY` | Supabase anonymous key |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Testing
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Tests are located in `__tests__/` directory. Run with:
+
+```bash
+npm test
+```
+
+## CI/CD
+
+GitHub Actions workflow runs on push/PR to main:
+- Lint
+- Type check
+- Test
+- Build
+
+See `.github/workflows/ci.yml`.

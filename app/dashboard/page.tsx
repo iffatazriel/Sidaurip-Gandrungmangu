@@ -1,6 +1,4 @@
-import Header from "@/components/Dashboard/Header";
 import ActivityCard from "@/components/Dashboard/ActivityCard";
-import Sidebar from "@/components/Dashboard/Sidebar";
 import SummaryCards from "@/components/Dashboard/SummaryCards";
 import RecentActivityCard from "@/components/Dashboard/RecentActivityCard";
 import FooterShift from "@/components/Dashboard/FooterShift";
@@ -220,23 +218,12 @@ const DashboardPage = async () => {
   const dashboardData = await getDashboardData();
 
   return (
-    <div className="flex min-h-screen">
-      {/* Sidebar kiri */}
-      <Sidebar />
-
-      {/* Area kanan */}
-      <div className="flex flex-col flex-1">
-        <Header />
-
-        <main className="flex-1 p-6 bg-gray-50">
-          {/* isi dashboard */}
-          <SummaryCards summary={dashboardData.summary} />
-          <ActivityCard trends={dashboardData.trends} />
-          <RecentActivityCard activities={dashboardData.activities} />
-          <FooterShift />
-        </main>
-      </div>
-    </div>
+    <>
+      <SummaryCards summary={dashboardData.summary} />
+      <ActivityCard trends={dashboardData.trends} />
+      <RecentActivityCard activities={dashboardData.activities} />
+      <FooterShift />
+    </>
   );
 };
 

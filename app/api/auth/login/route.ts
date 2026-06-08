@@ -2,26 +2,28 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifyPassword } from "@/lib/auth/password";
 import { createSession, ensureAuthTables } from "@/lib/auth/session";
 import { prisma } from "@/lib/prisma";
-
-type LoginInput = {
-  nik?: string;
-  password?: string;
-};
-
-function text(value: unknown) {
-  return typeof value === "string" ? value.trim() : "";
-}
+import { checkRateLimit, resetRateLimit } from "@/lib/rate-limit";
+import { loginFormSchema } from "@/lib/validations";
+import { ZodError } from "zod";
 
 export async function POST(request: NextRequest) {
   try {
     await ensureAuthTables();
 
-    const body = (await request.json()) as LoginInput;
-    const nik = text(body.nik).replace(/\D/g, "");
-    const password = text(body.password);
+    const body = loginFormSchema.parse(await request.json());
+    const nik = body.nik;
+    const password = body.password;
 
-    if (!nik || !password) {
-      return NextResponse.json({ message: "NIK dan password wajib diisi" }, { status: 400 });
+    const ip = request.headers.get('x-forwarded-for') ?? request.headers.get('x-real-ip') ?? 'unknown';
+    const rateKey = `login:${nik}:${ip}`;
+    const rateCheck = checkRateLimit(rateKey);
+
+    if (!rateCheck.allowed) {
+      const waitMinutes = Math.ceil((rateCheck.resetAt - Date.now()) / 60000);
+      return NextResponse.json(
+        { message: `Terlalu banyak percobaan login. Coba lagi dalam ${waitMinutes} menit` },
+        { status: 429 }
+      );
     }
 
     const users = await prisma.$queryRaw<
@@ -38,6 +40,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: "NIK atau password salah" }, { status: 401 });
     }
 
+    resetRateLimit(rateKey);
     await createSession(user.id);
 
     return NextResponse.json({
@@ -48,6 +51,10 @@ export async function POST(request: NextRequest) {
       status: user.status,
     });
   } catch (error) {
+    if (error instanceof ZodError) {
+      const messages = error.issues.map((e) => e.message);
+      return NextResponse.json({ message: messages.join(", ") }, { status: 400 });
+    }
     console.error("LOGIN_ERROR", error);
     return NextResponse.json({ message: "Gagal login" }, { status: 500 });
   }

@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { parse } from "csv-parse/sync";
+import { parse } from "csv-parse";
 import { prisma } from "../lib/prisma";
 
 type ResidentCSV = {
@@ -21,40 +21,62 @@ type ResidentCSV = {
   status: string;
 };
 
+const BATCH_SIZE = 1000;
+
 async function main() {
   const filePath = path.join(process.cwd(), "data", "penduduk_sidaurip.csv");
-  const fileContent = fs.readFileSync(filePath, "utf-8");
 
-  const rows = parse(fileContent, {
-    columns: true,
-    skip_empty_lines: true,
-    trim: true,
-  }) as ResidentCSV[];
+  const parser = fs
+    .createReadStream(filePath, { encoding: "utf-8" })
+    .pipe(parse({ columns: true, skip_empty_lines: true, trim: true }));
 
-  const residents = rows.map((row) => ({
-    nama: row.nama,
-    nik: row.nik,
-    jenisKelamin: row.jenisKelamin,
-    tempatLahir: row.tempatLahir || null,
-    tanggalLahir: row.tanggalLahir ? new Date(row.tanggalLahir) : null,
-    agama: row.agama || null,
-    alamat: row.alamat,
-    rt: row.rt || null,
-    rw: row.rw || null,
-    dusun: row.dusun || null,
-    pekerjaan: row.pekerjaan || null,
-    pendidikan: row.pendidikan || null,
-    statusKawin: row.statusKawin || null,
-    noKK: row.noKK || null,
-    status: row.status || "AKTIF",
-  }));
+  let batch: any[] = [];
+  let totalInserted = 0;
+  let batchIndex = 0;
 
-  const result = await prisma.resident.createMany({
-    data: residents,
-    skipDuplicates: true,
-  });
+  for await (const row of parser) {
+    const r = row as ResidentCSV;
+    batch.push({
+      nama: r.nama,
+      nik: r.nik,
+      jenisKelamin: r.jenisKelamin,
+      tempatLahir: r.tempatLahir || null,
+      tanggalLahir: r.tanggalLahir ? new Date(r.tanggalLahir) : null,
+      agama: r.agama || null,
+      alamat: r.alamat,
+      rt: r.rt || null,
+      rw: r.rw || null,
+      dusun: r.dusun || null,
+      pekerjaan: r.pekerjaan || null,
+      pendidikan: r.pendidikan || null,
+      statusKawin: r.statusKawin || null,
+      noKK: r.noKK || null,
+      status: r.status || "AKTIF",
+    });
 
-  console.log(`Import selesai. Data masuk: ${result.count}`);
+    if (batch.length >= BATCH_SIZE) {
+      const result = await prisma.resident.createMany({
+        data: batch,
+        skipDuplicates: true,
+      });
+      totalInserted += result.count;
+      batchIndex++;
+      console.log(`Batch ${batchIndex}: inserted ${result.count} (total: ${totalInserted})`);
+      batch = [];
+    }
+  }
+
+  // Insert remaining records
+  if (batch.length > 0) {
+    const result = await prisma.resident.createMany({
+      data: batch,
+      skipDuplicates: true,
+    });
+    totalInserted += result.count;
+    console.log(`Final batch: inserted ${result.count} (total: ${totalInserted})`);
+  }
+
+  console.log(`Import selesai. Total data masuk: ${totalInserted}`);
 }
 
 main()

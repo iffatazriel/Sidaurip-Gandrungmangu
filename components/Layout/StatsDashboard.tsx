@@ -1,3 +1,5 @@
+import AnimateOnScroll from "../../components/ui/AnimateOnScroll";
+
 export default function StatsDashboard() {
   return (
     <section className="bg-surface-container-low py-24">
@@ -12,7 +14,7 @@ export default function StatsDashboard() {
         </div>
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-          <article className="stats-dashboard-card flex flex-col items-center justify-center rounded-2xl bg-surface-container-lowest p-10 text-center">
+          <AnimateOnScroll className="stats-dashboard-card flex flex-col items-center justify-center rounded-2xl bg-surface-container-lowest p-10 text-center">
             <div className="relative mb-6 flex h-32 w-32 items-center justify-center">
               <svg className="h-full w-full -rotate-90" viewBox="0 0 128 128">
                 <circle
@@ -49,9 +51,9 @@ export default function StatsDashboard() {
             <p className="mt-2 text-xs font-bold text-secondary">
               +2.4% vs tahun lalu
             </p>
-          </article>
+          </AnimateOnScroll>
 
-          <article className="stats-dashboard-card relative overflow-hidden rounded-2xl bg-primary-container p-10 text-on-primary [animation-delay:140ms]">
+          <AnimateOnScroll className="stats-dashboard-card relative overflow-hidden rounded-2xl bg-primary-container p-10 text-on-primary [animation-delay:140ms]">
             <span className="material-symbols-outlined stats-dashboard-icon absolute -bottom-4 -right-4 text-9xl text-white/10">
               family_history
             </span>
@@ -67,9 +69,9 @@ export default function StatsDashboard() {
             <p className="text-sm leading-relaxed">
               Mencakup 12 Dusun dan 45 Rukun Tetangga (RT).
             </p>
-          </article>
+          </AnimateOnScroll>
 
-          <article className="stats-dashboard-card flex flex-col justify-between rounded-2xl bg-surface-container-lowest p-10 [animation-delay:280ms]">
+          <AnimateOnScroll className="stats-dashboard-card flex flex-col justify-between rounded-2xl bg-surface-container-lowest p-10 [animation-delay:280ms]">
             <div>
               <p className="mb-4 text-sm font-bold uppercase tracking-widest text-on-surface-variant">
                 Luas Wilayah
@@ -103,7 +105,7 @@ export default function StatsDashboard() {
                 <div className="stats-dashboard-bar h-full w-[35%] bg-tertiary-container [animation-delay:240ms]" />
               </div>
             </div>
-          </article>
+          </AnimateOnScroll>
         </div>
       </div>
     </section>

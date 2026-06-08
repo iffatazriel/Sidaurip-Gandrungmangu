@@ -67,12 +67,6 @@ export default function Header() {
 
         <div className="hidden items-center gap-3 lg:flex">
           <Link
-            className="rounded-lg px-4 py-2.5 text-sm font-semibold text-blue-900 transition hover:bg-blue-50"
-            href="/login"
-          >
-            Login
-          </Link>
-          <Link
             className="rounded-lg bg-primary-container px-4 py-2.5 text-sm font-semibold text-on-primary transition-all hover:opacity-90 sm:px-6 sm:text-base"
             href="/layanan-mandiri"
           >
@@ -115,14 +109,6 @@ export default function Header() {
                 </Link>
               );
             })}
-
-            <Link
-              href="/login"
-              onClick={() => setIsMenuOpen(false)}
-              className="rounded-lg px-4 py-3 text-center text-sm font-semibold text-blue-900 transition hover:bg-slate-100"
-            >
-              Login
-            </Link>
 
             <Link
               href="/layanan-mandiri"

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Skeleton } from "@/components/ui/Skeleton";
 
 type CitizenAccount = {
   id: number;
@@ -98,11 +99,33 @@ export default function AccountManager({ initialAccounts }: { initialAccounts: C
           </thead>
           <tbody className="divide-y divide-slate-100">
             {isLoading ? (
-              <tr>
-                <td className="py-6 text-slate-500" colSpan={6}>
-                  Memuat akun...
-                </td>
-              </tr>
+              <>
+                {[...Array(5)].map((_, i) => (
+                  <tr key={i}>
+                    <td className="py-4 pr-4">
+                      <div className="flex items-center gap-3">
+                        <Skeleton className="h-8 w-8 rounded-full" />
+                        <Skeleton className="h-4 w-36" />
+                      </div>
+                    </td>
+                    <td className="py-4 pr-4">
+                      <Skeleton className="h-4 w-28 font-mono" />
+                    </td>
+                    <td className="py-4 pr-4">
+                      <Skeleton className="h-4 w-24" />
+                    </td>
+                    <td className="py-4 pr-4">
+                      <Skeleton className="h-6 w-20 rounded-full" />
+                    </td>
+                    <td className="py-4 pr-4">
+                      <Skeleton className="h-8 w-28 rounded-lg" />
+                    </td>
+                    <td className="py-4 pr-4">
+                      <Skeleton className="h-8 w-20 rounded-lg" />
+                    </td>
+                  </tr>
+                ))}
+              </>
             ) : accounts.length ? (
               accounts.map((account) => (
                 <tr key={account.id}>

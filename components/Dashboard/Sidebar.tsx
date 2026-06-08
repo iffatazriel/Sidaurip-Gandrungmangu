@@ -19,7 +19,7 @@ const navItems = [
 ];
 
 const secondaryNavItems = [
-  { label: "Overview", href: "/dashboard", icon: "settings" },
+  { label: "Pengaturan", href: "/dashboard/pengaturan", icon: "settings" },
 ];
 
 function isActivePath(pathname: string, href: string) {

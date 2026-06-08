@@ -2,38 +2,18 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { hashPassword } from "@/lib/auth/password";
 import { createSession, ensureAuthTables } from "@/lib/auth/session";
-
-type RegisterInput = {
-  nik?: string;
-  name?: string;
-  phone?: string;
-  password?: string;
-};
-
-function text(value: unknown) {
-  return typeof value === "string" ? value.trim() : "";
-}
+import { registerFormSchema } from "@/lib/validations";
+import { ZodError } from "zod";
 
 export async function POST(request: NextRequest) {
   try {
     await ensureAuthTables();
 
-    const body = (await request.json()) as RegisterInput;
-    const nik = text(body.nik).replace(/\D/g, "");
-    const name = text(body.name);
-    const phone = text(body.phone) || null;
-    const password = text(body.password);
-
-    if (nik.length !== 16) {
-      return NextResponse.json({ message: "NIK harus 16 digit" }, { status: 400 });
-    }
-
-    if (!name || password.length < 8) {
-      return NextResponse.json(
-        { message: "Nama wajib diisi dan password minimal 8 karakter" },
-        { status: 400 }
-      );
-    }
+    const body = registerFormSchema.parse(await request.json());
+    const nik = body.nik;
+    const name = body.name;
+    const phone = body.phone || null;
+    const password = body.password;
 
     const existing = await prisma.$queryRaw<{ id: number }[]>`
       SELECT id FROM users WHERE nik = ${nik} LIMIT 1
@@ -84,6 +64,10 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
+    if (error instanceof ZodError) {
+      const messages = error.issues.map((e) => e.message);
+      return NextResponse.json({ message: messages.join(", ") }, { status: 400 });
+    }
     console.error("REGISTER_ERROR", error);
     return NextResponse.json({ message: "Gagal membuat akun" }, { status: 500 });
   }
