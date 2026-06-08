@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth/session";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 type NewsPostRow = {
   id: number;
@@ -141,6 +142,17 @@ async function getUniqueSlug(title: string, excludeId?: number) {
 
 export async function GET(request: NextRequest) {
   try {
+    const ip = request.headers.get('x-forwarded-for') ?? request.headers.get('x-real-ip') ?? 'unknown';
+    const rateCheck = checkRateLimit(`api:berita:${ip}`);
+
+    if (!rateCheck.allowed) {
+      const waitMinutes = Math.ceil((rateCheck.resetAt - Date.now()) / 60000);
+      return NextResponse.json(
+        { message: `Terlalu banyak permintaan. Coba lagi dalam ${waitMinutes} menit` },
+        { status: 429 }
+      );
+    }
+
     await ensureNewsTableReady();
 
     const searchParams = request.nextUrl.searchParams;
